@@ -153,7 +153,7 @@ const ScheduleMeeting = () => {
                   <p className="font-semibold text-lg mb-3">Our Availability</p>
                   <div className="flex items-center mb-2">
                     <Calendar className="h-5 w-5 text-indigo-300 mr-2" />
-                    <p className="text-indigo-200">Monday - Friday: 9:00 AM - 6:00 PM EST</p>
+                    <p className="text-indigo-200">Monday - Friday: 9:00 AM - 6:00 PM IST</p>
                   </div>
                   <div className="flex items-center">
                     <Clock className="h-5 w-5 text-indigo-300 mr-2" />
@@ -186,7 +186,7 @@ const ScheduleMeeting = () => {
                     <p className="text-center text-green-700">We'll confirm your appointment shortly via email.</p>
                   </div>
                 ) : (
-                  <form onSubmit={handleSubmit} className="space-y-6">
+                  <form onSubmit={handleSubmit}    className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
                         <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
@@ -335,11 +335,12 @@ const ScheduleMeeting = () => {
                     
                     <div>
                       <button
-                        type="submit"
-                        className="w-full flex justify-center py-3 px-4 border border-transparent rounded-full shadow-lg text-base font-medium text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 transform hover:scale-105"
-                      >
-                        Schedule Meeting
-                      </button>
+  type="submit"
+  className="w-full flex justify-center py-3 px-4 border border-transparent rounded-full shadow-lg text-base font-medium text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 transform hover:scale-105"
+>
+  Schedule Meeting
+</button>
+
                     </div>
                     
                     <p className="text-xs text-gray-500 text-center mt-4">
