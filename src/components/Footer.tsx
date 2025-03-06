@@ -170,7 +170,7 @@ const Footer = () => {
                 <Phone className="h-5 w-5 text-indigo-400 mr-3 mt-0.5" />
                 <div>
                   <p className="text-gray-300 font-medium">Phone</p>
-                  <a href="tel:+15551234567" className="text-gray-400 hover:text-indigo-400 transition-colors">+1 (555) 123-4567</a>
+                  <a href="tel:+91 9353083597" className="text-gray-400 hover:text-indigo-400 transition-colors">+91 9353083597</a>
                 </div>
               </li>
               <li className="flex items-start">
@@ -178,8 +178,8 @@ const Footer = () => {
                 <div>
                   <p className="text-gray-300 font-medium">Address</p>
                   <address className="text-gray-400 not-italic">
-                    123 Innovation Drive<br />
-                    San Francisco, CA 94103
+                    Kr mill colony<br />
+                    Mysore, KA 
                   </address>
                 </div>
               </li>
