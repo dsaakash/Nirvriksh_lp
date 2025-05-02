@@ -66,7 +66,7 @@ const Header = () => {
           
           <div className="hidden md:flex items-center">
             <a 
-              href="#schedule" 
+              href="https://calendly.com/nirvriksh/meet-up" 
               className="ml-8 inline-flex items-center justify-center px-5 py-2.5 border border-transparent rounded-full shadow-sm text-base font-medium text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 transform transition-all duration-200 hover:scale-105 hover:shadow-lg"
             >
               Schedule a Call
@@ -144,7 +144,7 @@ const Header = () => {
             
             <div className="mt-4 pt-2">
               <a 
-                href="#schedule" 
+                href="https://calendly.com/nirvriksh/meet-up" 
                 className="block w-full text-center px-4 py-3 rounded-full text-base font-medium text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-md transition-all duration-200"
                 onClick={() => setIsMenuOpen(false)}
               >
