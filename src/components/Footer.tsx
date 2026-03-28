@@ -1,5 +1,6 @@
 import React from 'react';
-import { Code2, Mail, Phone, MapPin, Linkedin, Twitter, Github, ArrowRight } from 'lucide-react';
+import { Mail, Phone, MapPin, Linkedin, Twitter, Github, ArrowRight } from 'lucide-react';
+import Logo from './Logo';
 
 const Footer = () => {
   return (
@@ -41,11 +42,8 @@ const Footer = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           <div>
-            <div className="flex items-center mb-6">
-              <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-2 rounded-lg">
-                <Code2 className="h-7 w-7 text-white" />
-              </div>
-              <span className="ml-3 text-2xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">Nirvriksh</span>
+            <div className="flex items-center mb-6 h-16">
+              <Logo variant="dark" className="h-full" />
             </div>
             <p className="text-gray-400 mb-6 leading-relaxed">
               Transforming ideas into powerful solutions with AI-driven full-stack development expertise.
@@ -91,14 +89,6 @@ const Footer = () => {
                     <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
                   </svg>
                   Success Stories
-                </a>
-              </li>
-              <li>
-                <a href="#schedule" className="text-gray-400 hover:text-indigo-400 transition-colors flex items-center">
-                  <svg className="h-3 w-3 mr-2 text-indigo-500" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                  </svg>
-                  Schedule a Meeting
                 </a>
               </li>
             </ul>
@@ -163,7 +153,7 @@ const Footer = () => {
                 <Mail className="h-5 w-5 text-indigo-400 mr-3 mt-0.5" />
                 <div>
                   <p className="text-gray-300 font-medium">Email</p>
-                  <a href="mailto:contact@nirvriksh.com" className="text-gray-400 hover:text-indigo-400 transition-colors">contact@nirvriksh.com</a>
+                  <a href="mailto:admin@nirvriksh.com" className="text-gray-400 hover:text-indigo-400 transition-colors">admin@nirvriksh.com</a>
                 </div>
               </li>
               <li className="flex items-start">

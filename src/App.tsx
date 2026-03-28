@@ -17,11 +17,6 @@ function App() {
       <TestimonialsSection />
       <ScheduleMeeting />
       <Footer />
-      <div className="text-center mt-4">
-        <a href="https://calendly.com/your-calendly-link" target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
-          Schedule a Meeting with Us
-        </a>
-      </div>
     </div>
   );
 }

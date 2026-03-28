@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Code2, ChevronDown } from 'lucide-react';
+import { Menu, X, ChevronDown } from 'lucide-react';
+import Logo from './Logo';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -22,11 +23,8 @@ const Header = () => {
     <header className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white/95 backdrop-blur-sm shadow-md' : 'bg-transparent'}`}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4">
-          <div className="flex items-center">
-            <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-2 rounded-lg">
-              <Code2 className="h-7 w-7 text-white" />
-            </div>
-            <span className="ml-3 text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Nirvriksh</span>
+          <div className="flex items-center h-16">
+            <Logo variant="light" className="h-full" />
           </div>
           
           <nav className="hidden md:flex space-x-10">
