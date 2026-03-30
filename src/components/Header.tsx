@@ -1,10 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Menu, X, ChevronDown } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import Logo from './Logo';
+import ProcessModal from './ProcessModal';
+
+
+
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isProcessModalOpen, setIsProcessModalOpen] = useState(false);
+
 
   useEffect(() => {
     const handleScroll = () => {
@@ -27,40 +34,49 @@ const Header = () => {
             <Logo variant="light" className="h-full" />
           </div>
           
-          <nav className="hidden md:flex space-x-10">
-            <a href="#what-we-do" className="text-base font-medium text-gray-700 hover:text-indigo-600 transition-colors relative group">
+          <nav className="hidden md:flex space-x-10 items-center">
+            <Link to="/#what-we-do" className="text-base font-medium text-gray-700 hover:text-indigo-600 transition-colors relative group">
               What We Do
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-indigo-600 transition-all duration-300 group-hover:w-full"></span>
-            </a>
-            <a href="#workflow" className="text-base font-medium text-gray-700 hover:text-indigo-600 transition-colors relative group">
+            </Link>
+            <button 
+              onClick={() => setIsProcessModalOpen(true)}
+              className="text-base font-medium text-gray-700 hover:text-indigo-600 transition-colors relative group"
+            >
               Our Process
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-indigo-600 transition-all duration-300 group-hover:w-full"></span>
-            </a>
-            <a href="#testimonials" className="text-base font-medium text-gray-700 hover:text-indigo-600 transition-colors relative group">
+            </button>
+
+            <Link to="/#testimonials" className="text-base font-medium text-gray-700 hover:text-indigo-600 transition-colors relative group">
               Success Stories
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-indigo-600 transition-all duration-300 group-hover:w-full"></span>
-            </a>
+            </Link>
             <div className="relative group">
               <button className="flex items-center text-base font-medium text-gray-700 hover:text-indigo-600 transition-colors">
                 Solutions
                 <ChevronDown className="ml-1 h-4 w-4 transition-transform duration-200 group-hover:rotate-180" />
               </button>
               <div className="absolute left-0 mt-2 w-56 rounded-xl shadow-lg py-2 bg-white ring-1 ring-black ring-opacity-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform origin-top scale-95 group-hover:scale-100">
-                <a href="#" className="block px-4 py-3 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">
+                <Link to="/saas/rca/vsl" className="block px-4 py-3 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">
+                  <div className="font-medium">Retail Control VSL</div>
+                  <div className="text-xs text-gray-500 mt-0.5">SaaS Inventory Solution</div>
+                </Link>
+                <Link to="/#workflow" className="block px-4 py-3 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">
                   <div className="font-medium">For Startups</div>
                   <div className="text-xs text-gray-500 mt-0.5">Validate ideas & build MVPs</div>
-                </a>
-                <a href="#" className="block px-4 py-3 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">
+                </Link>
+                <Link to="/#workflow" className="block px-4 py-3 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">
                   <div className="font-medium">For Mid-Startups</div>
                   <div className="text-xs text-gray-500 mt-0.5">Scale & optimize your platform</div>
-                </a>
-                <a href="#" className="block px-4 py-3 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">
+                </Link>
+                <Link to="/#workflow" className="block px-4 py-3 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">
                   <div className="font-medium">For Enterprises</div>
                   <div className="text-xs text-gray-500 mt-0.5">Digital transformation & AI integration</div>
-                </a>
+                </Link>
               </div>
             </div>
           </nav>
+
           
           <div className="hidden md:flex items-center">
             <a 
@@ -99,13 +115,16 @@ const Header = () => {
             >
               What We Do
             </a>
-            <a 
-              href="#workflow" 
-              className="block px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 transition-colors"
-              onClick={() => setIsMenuOpen(false)}
+            <button 
+              className="block w-full text-left px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 transition-colors"
+              onClick={() => {
+                setIsProcessModalOpen(true);
+                setIsMenuOpen(false);
+              }}
             >
               Our Process
-            </a>
+            </button>
+
             <a 
               href="#testimonials" 
               className="block px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 transition-colors"
@@ -152,7 +171,13 @@ const Header = () => {
           </div>
         </div>
       )}
+
+      <ProcessModal 
+        isOpen={isProcessModalOpen} 
+        onClose={() => setIsProcessModalOpen(false)} 
+      />
     </header>
+
   );
 };
 

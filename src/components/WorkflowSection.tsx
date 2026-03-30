@@ -1,393 +1,221 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+
 import { 
   Lightbulb, 
-  MessageSquare, 
-  Code2, 
   Rocket, 
-  MessageCircle, 
-  FileSignature, 
-  CreditCard, 
-  Video, 
-  FileText, 
-  Milestone, 
-  LineChart,
-  CheckCircle
+  Zap,
+  Target,
+  ShieldCheck, 
+  BarChart3, 
+  Layers, 
+  ArrowRight,
+  ChevronLeft,
+  Search,
+  Settings2,
+  Users2,
+  Lock,
+  Globe
 } from 'lucide-react';
 
+type Category = 'startup' | 'midstartup' | 'mnc' | null;
+
 const WorkflowSection = () => {
+  const [selectedCategory, setSelectedCategory] = useState<Category>(null);
+  
+  useEffect(() => {
+    const updateFromHash = () => {
+      const hash = window.location.hash;
+      if (hash === '#workflow-startup') setSelectedCategory('startup');
+      else if (hash === '#workflow-midstartup') setSelectedCategory('midstartup');
+      else if (hash === '#workflow-mnc') setSelectedCategory('mnc');
+      
+      if (hash.startsWith('#workflow')) {
+        const section = document.getElementById('workflow');
+        if (section) section.scrollIntoView({ behavior: 'smooth' });
+      }
+    };
+
+    updateFromHash();
+    window.addEventListener('hashchange', updateFromHash);
+    
+    const handleCategorySet = (e: CustomEvent<Category>) => {
+      setSelectedCategory(e.detail);
+    };
+
+    window.addEventListener('set-workflow-category' as any, handleCategorySet as any);
+    
+    return () => {
+      window.removeEventListener('hashchange', updateFromHash);
+      window.removeEventListener('set-workflow-category' as any, handleCategorySet as any);
+    };
+  }, []);
+
+
+
+  const workflows = {
+    startup: {
+      title: "Startup Lifecycle",
+      subtitle: "From Zero to Market Validation",
+      steps: [
+        { id: "01", name: "Problem-Solution Mapping", desc: "We validate your core concept by deep-diving into user pain points and market gaps.", icon: <Search className="h-6 w-6" /> },
+        { id: "02", name: "MVP Blueprinting", desc: "Identifying the leanest version of your product that delivers the highest value.", icon: <Lightbulb className="h-6 w-6" /> },
+        { id: "03", name: "Rapid Prototyping", desc: "Building the first functional POC to test with real users within 2-4 weeks.", icon: <Zap className="h-6 w-6" /> },
+        { id: "04", name: "Validation & 1.0 Release", desc: "Iterating based on feedback and preparing for your public market entry.", icon: <Rocket className="h-6 w-6" /> }
+      ]
+    },
+    midstartup: {
+      title: "Growth & Scaling",
+      subtitle: "Optimizing for the Next 10x",
+      steps: [
+        { id: "01", name: "Operational Audit", desc: "Identifying technical bottlenecks and operational friction slowing your growth.", icon: <Target className="h-6 w-6" /> },
+        { id: "02", name: "Infrastructure Scaling", desc: "Upgrading your backend and frontend to handle increased traffic and complexity.", icon: <Layers className="h-6 w-6" /> },
+        { id: "03", name: "Process Automation", desc: "Replacing manual tasks with intelligent internal tools and AI workflows.", icon: <Settings2 className="h-6 w-6" /> },
+        { id: "04", name: "Performance Refinement", desc: "Fine-tuning UX and system speed for premium-level user retention.", icon: <BarChart3 className="h-6 w-6" /> }
+      ]
+    },
+    mnc: {
+      title: "Enterprise Transformation",
+      subtitle: "Modernizing Large-Scale Systems",
+      steps: [
+        { id: "01", name: "Stakeholder Alignment", desc: "Defining clear KPIs and requirements across multiple departments.", icon: <Users2 className="h-6 w-6" /> },
+        { id: "02", name: "Governance & Compliance", desc: "Ensuring all new modules meet global security and data privacy standards.", icon: <Lock className="h-6 w-6" /> },
+        { id: "03", name: "Modular Integration", desc: "Building independent micro-services that integrate with existing legacy tech.", icon: <Globe className="h-6 w-6" /> },
+        { id: "04", name: "Deployment & Support", desc: "Phased rollouts with extensive training and 24/7 technical stability.", icon: <ShieldCheck className="h-6 w-6" /> }
+      ]
+    }
+  };
+
+  const currentWorkflow = selectedCategory ? workflows[selectedCategory] : null;
+
   return (
-    <section id="workflow" className="py-24 bg-gray-50 relative overflow-hidden">
-      {/* Background decorative elements */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-100 rounded-full mix-blend-multiply filter blur-3xl opacity-70"></div>
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-purple-100 rounded-full mix-blend-multiply filter blur-3xl opacity-70"></div>
+    <section id="workflow" className="py-32 bg-slate-50 relative overflow-hidden">
+      {/* Decorative background */}
+      <div className="absolute top-0 right-0 w-full h-[800px] bg-gradient-to-b from-blue-50/50 to-transparent pointer-events-none -z-10" />
       
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-20">
-          <div className="inline-flex items-center px-4 py-2 rounded-full bg-indigo-100 text-indigo-800 mb-6">
-            <svg className="h-4 w-4 mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M14.5 20.5C14.5 21.33 13.83 22 13 22H11C10.17 22 9.5 21.33 9.5 20.5V20H14.5V20.5ZM21 19H3V17.5H21V19ZM18.16 3.8C19.3 5.11 20 6.85 20 8.75C20 12.27 17.58 15.22 14.25 16.03V16.5H9.75V16.03C6.42 15.22 4 12.27 4 8.75C4 5.13 6.5 2.06 9.93 1.32C10.51 1.19 11.12 1.21 11.7 1.37C13.35 0.55 15.28 0.86 16.64 2.04C17.17 2.5 17.71 3.11 18.16 3.8Z" fill="currentColor"/>
-            </svg>
-            <span className="text-sm font-medium">Our Proven Process</span>
-          </div>
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            className="inline-flex items-center px-4 py-2 rounded-full bg-blue-100 text-blue-700 mb-6 font-bold uppercase tracking-widest text-[10px] border border-blue-200"
+          >
+            Blueprinting the Future
+          </motion.div>
           
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            Our Streamlined <span className="text-indigo-600">Workflow</span>
+          <h2 className="text-4xl md:text-6xl font-black text-slate-900 mb-8 leading-tight tracking-tight">
+            How We <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Partner</span>
           </h2>
           
-          <p className="text-xl text-gray-600 leading-relaxed">
-            From initial concept to market launch, our comprehensive process ensures your vision becomes reality with efficiency and precision.
+          <p className="text-xl text-slate-600 font-medium leading-relaxed">
+            Our process isn't one-size-fits-all. We adapt our blueprint to match the complexity and scale of your business.
           </p>
         </div>
-        
-        {/* Main workflow steps */}
-        <div className="relative">
-          {/* Vertical line */}
-          <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-gradient-to-b from-indigo-300 to-purple-400 rounded-full"></div>
-          
-          {/* Step 1 */}
-          <div className="relative mb-24">
-            <div className="flex flex-col md:flex-row items-center">
-              <div className="md:w-1/2 md:pr-16 mb-8 md:mb-0">
-                <div className="bg-white p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-shadow transform hover:-translate-y-1 duration-300">
-                  <div className="flex items-center mb-6">
-                    <div className="bg-indigo-100 rounded-xl p-3">
-                      <Lightbulb className="h-8 w-8 text-indigo-600" />
+
+        <AnimatePresence mode="wait">
+          {!selectedCategory ? (
+            <motion.div 
+              key="selection"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 1.05 }}
+              className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto"
+            >
+              {[
+                { id: 'startup', title: 'Startup', sub: '0 → 1 Build', desc: 'Validating ideas and building MVPs with speed.', icon: <Zap className="h-8 w-8" />, color: 'blue' },
+                { id: 'midstartup', title: 'Mid-Startup', sub: 'Series A/B Growth', desc: 'Scaling operations and optimizing for 10x traffic.', icon: <Rocket className="h-8 w-8" />, color: 'indigo' },
+                { id: 'mnc', title: 'MNC', sub: 'Enterprise Scale', desc: 'Modernizing legacy tech and modular integration.', icon: <ShieldCheck className="h-8 w-8" />, color: 'slate' }
+              ].map((cat) => {
+                const colorClasses = {
+                  blue: 'bg-blue-50 text-blue-600',
+                  indigo: 'bg-indigo-50 text-indigo-600',
+                  slate: 'bg-slate-50 text-slate-600'
+                }[cat.color as 'blue' | 'indigo' | 'slate'];
+
+                return (
+                  <button
+                    key={cat.id}
+                    onClick={() => setSelectedCategory(cat.id as Category)}
+                    className="glass-premium p-10 rounded-[2.5rem] border border-slate-100 text-left hover:border-blue-500 hover:shadow-2xl hover:shadow-blue-100 transition-all group"
+                  >
+                    <div className={`p-4 ${colorClasses} rounded-2xl w-fit mb-8 group-hover:scale-110 transition-transform`}>
+                      {cat.icon}
                     </div>
-                    <h3 className="ml-4 text-2xl font-bold text-gray-900">Exploring Your Idea</h3>
-                  </div>
-                  <p className="text-gray-600 leading-relaxed mb-6">
-                    We begin by understanding your vision, goals, and target market. Our team works closely with you to refine your concept and identify the core features needed for a successful product.
-                  </p>
-                  <ul className="space-y-2">
-                    <li className="flex items-start">
-                      <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700">In-depth discovery sessions</span>
-                    </li>
-                    <li className="flex items-start">
-                      <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700">Market research & competitor analysis</span>
-                    </li>
-                    <li className="flex items-start">
-                      <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700">Feature prioritization workshops</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              <div className="hidden md:flex items-center justify-center z-10">
-                <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full h-16 w-16 flex items-center justify-center text-white font-bold text-xl shadow-lg">1</div>
-              </div>
-              <div className="md:w-1/2 md:pl-16">
-                <div className="bg-white p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-shadow transform hover:-translate-y-1 duration-300">
-                  <div className="flex items-center mb-6">
-                    <div className="bg-indigo-100 rounded-xl p-3">
-                      <MessageSquare className="h-8 w-8 text-indigo-600" />
+                    <div className="mb-4">
+                      <span className="text-xs font-bold text-slate-400 uppercase tracking-[0.2em]">{cat.sub}</span>
+                      <h3 className="text-3xl font-black text-slate-900 mt-1">{cat.title}</h3>
                     </div>
-                    <h3 className="ml-4 text-2xl font-bold text-gray-900">Discussing Requirements</h3>
-                  </div>
-                  <p className="text-gray-600 leading-relaxed mb-6">
-                    We dive deep into technical specifications, user experience goals, and business requirements to create a comprehensive roadmap for development.
-                  </p>
-                  <ul className="space-y-2">
-                    <li className="flex items-start">
-                      <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700">Technical architecture planning</span>
-                    </li>
-                    <li className="flex items-start">
-                      <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700">UX/UI design workshops</span>
-                    </li>
-                    <li className="flex items-start">
-                      <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700">Detailed project scope documentation</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          {/* Step 2 */}
-          <div className="relative mb-24">
-            <div className="flex flex-col md:flex-row items-center">
-              <div className="md:w-1/2 md:pr-16 mb-8 md:mb-0 md:order-1">
-                <div className="bg-white p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-shadow transform hover:-translate-y-1 duration-300">
-                  <div className="flex items-center mb-6">
-                    <div className="bg-indigo-100 rounded-xl p-3">
-                      <Rocket className="h-8 w-8 text-indigo-600" />
+                    <p className="text-slate-500 font-medium mb-8 leading-relaxed">{cat.desc}</p>
+                    <div className="flex items-center gap-2 text-blue-600 font-bold group-hover:gap-4 transition-all">
+                      View Process
+                      <ArrowRight className="h-5 w-5" />
                     </div>
-                    <h3 className="ml-4 text-2xl font-bold text-gray-900">Launching to Market</h3>
-                  </div>
-                  <p className="text-gray-600 leading-relaxed mb-6">
-                    We handle deployment, monitoring, and initial user feedback collection to ensure a smooth launch. Our team remains available for quick iterations based on real-world usage.
-                  </p>
-                  <ul className="space-y-2">
-                    <li className="flex items-start">
-                      <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700">Seamless deployment process</span>
-                    </li>
-                    <li className="flex items-start">
-                      <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700">Performance monitoring & optimization</span>
-                    </li>
-                    <li className="flex items-start">
-                      <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700">User feedback collection & analysis</span>
-                    </li>
-                  </ul>
-                </div>
+                  </button>
+                );
+              })}
+            </motion.div>
+          ) : (
+            <motion.div 
+              key="workflow-content"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              className="max-w-5xl mx-auto"
+            >
+              <button 
+                onClick={() => setSelectedCategory(null)}
+                className="flex items-center gap-2 text-slate-400 font-bold hover:text-blue-600 mb-12 transition-colors uppercase tracking-widest text-xs"
+              >
+                <ChevronLeft className="h-4 w-4" />
+                Back to Selection
+              </button>
+
+              <div className="mb-16">
+                <h3 className="text-4xl font-black text-slate-900 mb-4">{currentWorkflow?.title}</h3>
+                <p className="text-xl text-slate-500 font-medium">{currentWorkflow?.subtitle}</p>
               </div>
-              <div className="hidden md:flex items-center justify-center z-10">
-                <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full h-16 w-16 flex items-center justify-center text-white font-bold text-xl shadow-lg">2</div>
-              </div>
-              <div className="md:w-1/2 md:pl-16 md:order-0">
-                <div className="bg-white p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-shadow transform hover:-translate-y-1 duration-300">
-                  <div className="flex items-center mb-6">
-                    <div className="bg-indigo-100 rounded-xl p-3">
-                      <Code2 className="h-8 w-8 text-indigo-600" />
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                {currentWorkflow?.steps.map((step, i) => (
+                  <motion.div 
+                    key={step.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.1 }}
+                    className="glass-premium p-8 rounded-3xl border border-slate-100 relative group overflow-hidden"
+                  >
+                    <div className="absolute top-0 right-0 p-8 text-6xl font-black text-slate-100 -z-10 group-hover:text-blue-50 transition-colors">
+                      {step.id}
                     </div>
-                    <h3 className="ml-4 text-2xl font-bold text-gray-900">Building Your MVP</h3>
-                  </div>
-                  <p className="text-gray-600 leading-relaxed mb-6">
-                    Our development team creates a Minimum Viable Product with the essential features needed to validate your concept in the market, using agile methodologies for rapid iteration.
-                  </p>
-                  <ul className="space-y-2">
-                    <li className="flex items-start">
-                      <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700">Agile development sprints</span>
-                    </li>
-                    <li className="flex items-start">
-                      <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700">Regular progress demos</span>
-                    </li>
-                    <li className="flex items-start">
-                      <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700">Comprehensive testing & QA</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          {/* Step 3 */}
-          <div className="relative mb-24">
-            <div className="flex flex-col md:flex-row items-center">
-              <div className="md:w-1/2 md:pr-16 mb-8 md:mb-0">
-                <div className="bg-white p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-shadow transform hover:-translate-y-1 duration-300">
-                  <div className="flex items-center mb-6">
-                    <div className="bg-indigo-100 rounded-xl p-3">
-                      <MessageCircle className="h-8 w-8 text-indigo-600" />
+                    <div className="flex items-center gap-4 mb-6">
+                      <div className="p-3 bg-blue-50 text-blue-600 rounded-xl">
+                        {step.icon}
+                      </div>
+                      <h4 className="text-xl font-black text-slate-800 leading-tight">
+                        {step.name}
+                      </h4>
                     </div>
-                    <h3 className="ml-4 text-2xl font-bold text-gray-900">Managing Interactions</h3>
-                  </div>
-                  <p className="text-gray-600 leading-relaxed mb-6">
-                    Our integrated chat-based system ensures seamless communication throughout the project lifecycle, keeping all stakeholders aligned and informed.
-                  </p>
-                  <ul className="space-y-2">
-                    <li className="flex items-start">
-                      <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700">Real-time project updates</span>
-                    </li>
-                    <li className="flex items-start">
-                      <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700">Centralized communication hub</span>
-                    </li>
-                    <li className="flex items-start">
-                      <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700">File sharing & collaboration tools</span>
-                    </li>
-                  </ul>
-                </div>
+                    <p className="text-slate-500 font-medium leading-relaxed">
+                      {step.desc}
+                    </p>
+                  </motion.div>
+                ))}
               </div>
-              <div className="hidden md:flex items-center justify-center z-10">
-                <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full h-16 w-16 flex items-center justify-center text-white font-bold text-xl shadow-lg">3</div>
-              </div>
-              <div className="md:w-1/2 md:pl-16">
-                <div className="bg-white p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-shadow transform hover:-translate-y-1 duration-300">
-                  <div className="flex items-center mb-6">
-                    <div className="bg-indigo-100 rounded-xl p-3">
-                      <FileSignature className="h-8 w-8 text-indigo-600" />
-                    </div>
-                    <h3 className="ml-4 text-2xl font-bold text-gray-900">Drafting & Signing Contracts</h3>
-                  </div>
-                  <p className="text-gray-600 leading-relaxed mb-6">
-                    We streamline the legal process with digital contract drafting and signing capabilities, ensuring clear agreements and smooth business relationships.
-                  </p>
-                  <ul className="space-y-2">
-                    <li className="flex items-start">
-                      <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700">Transparent contract terms</span>
-                    </li>
-                    <li className="flex items-start">
-                      <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700">Digital signature integration</span>
-                    </li>
-                    <li className="flex items-start">
-                      <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700">Secure document storage</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          {/* Step 4 */}
-          <div className="relative">
-            <div className="flex flex-col md:flex-row items-center">
-              <div className="md:w-1/2 md:pr-16 mb-8 md:mb-0 md:order-1">
-                <div className="bg-white p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-shadow transform hover:-translate-y-1 duration-300">
-                  <div className="flex items-center mb-6">
-                    <div className="bg-indigo-100 rounded-xl p-3">
-                      <LineChart className="h-8 w-8 text-indigo-600" />
-                    </div>
-                    <h3 className="ml-4 text-2xl font-bold text-gray-900">Project Lifecycle Tracking</h3>
-                  </div>
-                  <p className="text-gray-600 leading-relaxed mb-6">
-                    Our comprehensive tracking system provides end-to-end visibility into your project's progress, from initial concept to final delivery and beyond.
-                  </p>
-                  <ul className="space-y-2">
-                    <li className="flex items-start">
-                      <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700">Interactive project dashboards</span>
-                    </li>
-                    <li className="flex items-start">
-                      <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700">Milestone tracking & notifications</span>
-                    </li>
-                    <li className="flex items-start">
-                      <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700">Resource allocation visualization</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              <div className="hidden md:flex items-center justify-center z-10">
-                <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full h-16 w-16 flex items-center justify-center text-white font-bold text-xl shadow-lg">4</div>
-              </div>
-              <div className="md:w-1/2 md:pl-16 md:order-0">
-                <div className="bg-white p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-shadow transform hover:-translate-y-1 duration-300">
-                  <div className="flex items-center mb-6">
-                    <div className="bg-indigo-100 rounded-xl p-3">
-                      <CreditCard className="h-8 w-8 text-indigo-600" />
-                    </div>
-                    <h3 className="ml-4 text-2xl font-bold text-gray-900">Handling Payments & Invoicing</h3>
-                  </div>
-                  <p className="text-gray-600 leading-relaxed mb-6">
-                    Our platform includes seamless payment processing and automated invoicing, with milestone-based payment structures to align deliverables with financial transactions.
-                  </p>
-                  <ul className="space-y-2">
-                    <li className="flex items-start">
-                      <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700">Milestone-based payment schedules</span>
-                    </li>
-                    <li className="flex items-start">
-                      <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700">Automated invoice generation</span>
-                    </li>
-                    <li className="flex items-start">
-                      <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700">Secure payment processing</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        {/* Additional features */}
-        <div className="mt-32">
-          <div className="text-center mb-16">
-            <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">Additional Platform Features</h3>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Our comprehensive platform includes everything you need for seamless project management and collaboration.
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border-b-4 border-indigo-500">
-              <div className="flex items-center mb-6">
-                <div className="bg-indigo-100 rounded-xl p-3">
-                  <Video className="h-6 w-6 text-indigo-600" />
-                </div>
-                <h4 className="ml-4 text-lg font-semibold text-gray-900">Video Meetings & Recording</h4>
-              </div>
-              <p className="text-gray-600 leading-relaxed">
-                Integrated video conferencing with automatic recording for seamless collaboration and future reference.
-              </p>
-              <div className="mt-6 pt-4 border-t border-gray-100">
-                <a href="#" className="inline-flex items-center text-indigo-600 hover:text-indigo-800 transition-colors">
-                  Learn more
-                  <svg className="ml-2 h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                  </svg>
+
+              <div className="mt-16 text-center">
+                <a 
+                  href="https://calendly.com/nirvriksh/meet-up"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-3 px-8 py-5 bg-slate-900 text-white rounded-2xl font-black text-lg hover:bg-slate-800 transition-all shadow-xl"
+                >
+                  Start Your {selectedCategory?.toUpperCase()} Discovery
+                  <ArrowRight className="h-5 w-5" />
                 </a>
               </div>
-            </div>
-            
-            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border-b-4 border-indigo-500">
-              <div className="flex items-center mb-6">
-                <div className="bg-indigo-100 rounded-xl p-3">
-                  <FileText className="h-6 w-6 text-indigo-600" />
-                </div>
-                <h4 className="ml-4 text-lg font-semibold text-gray-900">Quotation & Contract Management</h4>
-              </div>
-              <p className="text-gray-600 leading-relaxed">
-                Streamlined creation, negotiation, and management of project quotations and contracts within the platform.
-              </p>
-              <div className="mt-6 pt-4 border-t border-gray-100">
-                <a href="#" className="inline-flex items-center text-indigo-600 hover:text-indigo-800 transition-colors">
-                  Learn more
-                  <svg className="ml-2 h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                  </svg>
-                </a>
-              </div>
-            </div>
-            
-            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border-b-4 border-indigo-500">
-              <div className="flex items-center mb-6">
-                <div className="bg-indigo-100 rounded-xl p-3">
-                  <Milestone className="h-6 w-6 text-indigo-600" />
-                </div>
-                <h4 className="ml-4 text-lg font-semibold text-gray-900">Milestone-Based Payments</h4>
-              </div>
-              <p className="text-gray-600 leading-relaxed">
-                Structured payment schedules tied to project milestones with automated invoicing and payment tracking.
-              </p>
-              <div className="mt-6 pt-4 border-t border-gray-100">
-                <a href="#" className="inline-flex items-center text-indigo-600 hover:text-indigo-800 transition-colors">
-                  Learn more
-                  <svg className="ml-2 h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                  </svg>
-                </a>
-              </div>
-            </div>
-            
-            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border-b-4 border-indigo-500">
-              <div className="flex items-center mb-6">
-                <div className="bg-indigo-100 rounded-xl p-3">
-                  <LineChart className="h-6 w-6 text-indigo-600" />
-                </div>
-                <h4 className="ml-4 text-lg font-semibold text-gray-900">Project Lifecycle Tracking</h4>
-              </div>
-              <p className="text-gray-600 leading-relaxed">
-                Comprehensive monitoring of all project stages with real-time updates and progress visualization.
-              </p>
-              <div className="mt-6 pt-4 border-t border-gray-100">
-                <a href="#" className="inline-flex items-center text-indigo-600 hover:text-indigo-800 transition-colors">
-                  Learn more
-                  <svg className="ml-2 h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                  </svg>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </section>
   );

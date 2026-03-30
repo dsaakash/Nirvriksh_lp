@@ -1,23 +1,14 @@
-import React from 'react';
-import Header from './components/Header';
-import HeroSection from './components/HeroSection';
-import Hook from './components/Hook';
-import WorkflowSection from './components/WorkflowSection';
-import TestimonialsSection from './components/TestimonialsSection';
-import ScheduleMeeting from './components/ScheduleMeeting';
-import Footer from './components/Footer';
+import { Routes, Route } from 'react-router-dom';
+
+import LandingPage from './pages/LandingPage';
+import SaaSVslPage from './pages/SaaSVslPage';
 
 function App() {
   return (
-    <div className="min-h-screen bg-white">
-      <Header />
-      <HeroSection />
-      <Hook />
-      <WorkflowSection />
-      <TestimonialsSection />
-      <ScheduleMeeting />
-      <Footer />
-    </div>
+    <Routes>
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/saas/rca/vsl" element={<SaaSVslPage />} />
+    </Routes>
   );
 }
 
