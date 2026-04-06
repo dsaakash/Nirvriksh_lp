@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, AnimatePresence, useAnimation } from 'framer-motion';
+import { motion, AnimatePresence, useAnimation, Variants } from 'framer-motion';
 import { 
   Database, 
   Layers, 
@@ -66,6 +66,51 @@ const BrandTree = () => {
       items: ['Retail Clothing Architect', 'Complex ERP Systems', 'SaaS Modernization']
     }
   ];
+
+  const treeContainerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.5,
+        delayChildren: 0.2
+      }
+    }
+  };
+
+  const drawPathVariants: Variants = {
+    hidden: { pathLength: 0, opacity: 0 },
+    visible: { 
+      pathLength: 1, 
+      opacity: 1, 
+      transition: { duration: 1.5, ease: "easeInOut" }
+    }
+  };
+
+  const popVariants: Variants = {
+    hidden: { scale: 0, opacity: 0, y: 20 },
+    visible: { 
+      scale: 1, 
+      opacity: 1, 
+      y: 0,
+      transition: { type: "spring", stiffness: 80, damping: 12, duration: 1 }
+    }
+  };
+
+  const floatVariants: Variants = {
+    rest: { y: 0 },
+    hover: { 
+      y: -10,
+      transition: { type: "spring", stiffness: 300, damping: 15 }
+    }
+  };
+
+  const floatContinuous: Variants = {
+    visible: {
+      y: [0, -10, 0],
+      transition: { duration: 4, repeat: Infinity, ease: "easeInOut" }
+    }
+  };
 
   const renderOfferModal = () => (
     <motion.div 
@@ -134,98 +179,200 @@ const BrandTree = () => {
         </div>
 
         <div className="flex flex-col items-center">
-          {/* Enhanced SVG Tree */}
+          {/* Enhanced SVG Tree with GSAP-like Framer Motion orchestration */}
           <div className="relative w-full max-w-4xl aspect-[4/3] mb-12">
-            <svg viewBox="0 0 800 600" className="w-full h-full drop-shadow-2xl">
+            <motion.svg 
+              viewBox="0 0 800 600" 
+              className="w-full h-full drop-shadow-[0_20px_40px_rgba(0,0,0,0.15)] overflow-visible"
+              variants={treeContainerVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+            >
               <defs>
-                <linearGradient id="trunkGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#92400e" />
-                  <stop offset="100%" stopColor="#78350f" />
+                <linearGradient id="trunkGrad3D" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#451a03" />
+                  <stop offset="20%" stopColor="#78350f" />
+                  <stop offset="50%" stopColor="#b45309" />
+                  <stop offset="80%" stopColor="#78350f" />
+                  <stop offset="100%" stopColor="#451a03" />
                 </linearGradient>
-                <filter id="glow">
-                  <feGaussianBlur stdDeviation="3.5" result="coloredBlur"/>
+                <linearGradient id="leafGrad3D" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#4ade80" />
+                  <stop offset="50%" stopColor="#16a34a" />
+                  <stop offset="100%" stopColor="#14532d" />
+                </linearGradient>
+                <linearGradient id="erpGrad3D" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#60a5fa" />
+                  <stop offset="50%" stopColor="#2563eb" />
+                  <stop offset="100%" stopColor="#1e3a8a" />
+                </linearGradient>
+                <radialGradient id="rootInner" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stopColor="#10b981" stopOpacity="0.8" />
+                  <stop offset="100%" stopColor="#047857" stopOpacity="0" />
+                </radialGradient>
+                <filter id="glow3D">
+                  <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
                   <feMerge>
                     <feMergeNode in="coloredBlur"/>
                     <feMergeNode in="SourceGraphic"/>
                   </feMerge>
                 </filter>
+                <filter id="shadow3D" x="-20%" y="-20%" width="140%" height="140%">
+                  <feDropShadow dx="0" dy="15" stdDeviation="15" floodOpacity="0.3" />
+                  <feDropShadow dx="0" dy="5" stdDeviation="5" floodOpacity="0.4" />
+                </filter>
+                <filter id="innerGlow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feComponentTransfer in="SourceAlpha"><feFuncA type="linear" slope="0.5"/></feComponentTransfer>
+                  <feGaussianBlur stdDeviation="3" result="blur"/>
+                  <feOffset dy="-4" dx="-2"/>
+                  <feComposite operator="out" in2="SourceAlpha"/>
+                  <feComposite operator="in" in2="SourceGraphic"/>
+                  <feBlend mode="multiply" in2="SourceGraphic" />
+                </filter>
               </defs>
 
-              {/* SAP FLOW ANIMATIONS (Animated energy paths) */}
-              <g filter="url(#glow)">
+              {/* 3D Platform/Ground */}
+              <motion.g variants={popVariants}>
+                <ellipse cx="400" cy="520" rx="300" ry="40" fill="#f1f5f9" filter="url(#shadow3D)" />
+                <ellipse cx="400" cy="520" rx="280" ry="30" fill="white" />
+              </motion.g>
+
+              {/* SAP FLOW ANIMATIONS (Animated energy paths) inside the trunk/roots */}
+              <motion.g filter="url(#glow3D)" variants={popVariants}>
                 <motion.path
-                  d="M250 550 Q250 480 400 350" // Core to Trunk
-                  stroke="#10b981"
-                  strokeWidth="2"
-                  fill="none"
-                  strokeDasharray="10 20"
-                  animate={sapControls}
-                  opacity={activeSegment === 'core' ? 1 : 0.2}
-                />
-                <motion.path
-                  d="M550 550 Q550 480 400 350" // Growth to Trunk
-                  stroke="#f59e0b"
-                  strokeWidth="2"
-                  fill="none"
-                  strokeDasharray="10 20"
-                  animate={sapControls}
-                  opacity={activeSegment === 'growth' ? 1 : 0.2}
-                />
-                <motion.path
-                  d="M400 350 L400 150" // Trunk
-                  stroke="#ea580c"
-                  strokeWidth="3"
+                  d="M250 550 Q250 480 400 350"
+                  stroke="#34d399"
+                  strokeWidth="6"
                   fill="none"
                   strokeDasharray="15 30"
                   animate={sapControls}
-                  opacity={activeSegment === 'services' ? 1 : 0.3}
+                  opacity={activeSegment === 'core' ? 1 : 0.1}
                 />
-              </g>
-
-              {/* THE TREE STRUCTURE */}
-              
-              {/* Ground level line */}
-              <line x1="100" y1="500" x2="700" y2="500" stroke="#cbd5e1" strokeWidth="2" strokeDasharray="8 8" />
-
-              {/* ROOTS: CORE (NIR) - Left */}
-              <motion.g onClick={() => setActiveSegment('core')} className="cursor-pointer group">
-                <path d="M250 500 Q200 520 180 580 M250 500 Q230 540 210 580 M250 500 Q270 540 290 580" stroke="#059669" strokeWidth="4" fill="none" strokeLinecap="round" />
-                <rect x="180" y="520" width="140" height="40" rx="20" fill="white" stroke="#10b981" strokeWidth="2" className="shadow-sm" />
-                <text x="250" y="545" textAnchor="middle" className="text-[10px] font-black uppercase tracking-widest fill-emerald-800">0 → 1 CORE</text>
-              </motion.g>
-
-              {/* ROOTS: GROWTH - Right */}
-              <motion.g onClick={() => setActiveSegment('growth')} className="cursor-pointer group">
-                <path d="M550 500 Q500 520 480 580 M550 500 Q570 540 590 580 M550 500 Q550 540 550 580" stroke="#d97706" strokeWidth="4" fill="none" strokeLinecap="round" />
-                <rect x="480" y="520" width="140" height="40" rx="20" fill="white" stroke="#f59e0b" strokeWidth="2" className="shadow-sm" />
-                <text x="550" y="545" textAnchor="middle" className="text-[10px] font-black uppercase tracking-widest fill-amber-800">SCALE GROWTH</text>
+                <motion.path
+                  d="M550 550 Q550 480 400 350"
+                  stroke="#fbbf24"
+                  strokeWidth="6"
+                  fill="none"
+                  strokeDasharray="15 30"
+                  animate={sapControls}
+                  opacity={activeSegment === 'growth' ? 1 : 0.1}
+                />
+                <motion.path
+                  d="M400 350 L400 150"
+                  stroke="#fdba74"
+                  strokeWidth="8"
+                  fill="none"
+                  strokeDasharray="20 40"
+                  animate={sapControls}
+                  opacity={activeSegment === 'services' ? 1 : 0.2}
+                />
               </motion.g>
 
               {/* TRUNK: SERVICES */}
-              <motion.g onClick={() => setActiveSegment('services')} className="cursor-pointer group">
-                <path d="M380 500 L380 350 Q380 250 320 150 M420 500 L420 350 Q420 250 480 150" stroke="url(#trunkGrad)" strokeWidth="15" fill="none" strokeLinecap="round" />
-                <rect x="340" y="380" width="120" height="36" rx="18" fill="white" stroke="#ea580c" strokeWidth="2" />
-                <text x="400" y="403" textAnchor="middle" className="text-[10px] font-black uppercase tracking-widest fill-orange-800">V / SERVICES</text>
+              <motion.g 
+                onClick={() => setActiveSegment('services')} 
+                className="cursor-pointer group"
+                variants={drawPathVariants}
+                style={{ transformOrigin: "400px 520px" }}
+              >
+                {/* Back shadow of trunk */}
+                <motion.path variants={drawPathVariants} d="M370 520 L370 350 Q370 250 300 150 M430 520 L430 350 Q430 250 500 150" stroke="#451a03" strokeWidth="40" fill="none" strokeLinecap="round" filter="url(#shadow3D)" />
+                {/* Main 3D trunk */}
+                <motion.path variants={drawPathVariants} d="M370 520 L370 350 Q370 250 300 150 M430 520 L430 350 Q430 250 500 150" stroke="url(#trunkGrad3D)" strokeWidth="36" fill="none" strokeLinecap="round" filter="url(#innerGlow)" />
+                {/* Label container floating in 3D */}
+                <motion.g variants={popVariants} transform="translate(0, 0)">
+                  <rect x="330" y="380" width="140" height="40" rx="20" fill="white" filter="url(#shadow3D)" className="group-hover:translate-y-[-2px] transition-transform" />
+                  <rect x="330" y="380" width="140" height="40" rx="20" fill="white" stroke="#ea580c" strokeWidth="2" className="group-hover:translate-y-[-2px] transition-transform" />
+                  <text x="400" y="405" textAnchor="middle" className="text-[12px] font-black uppercase tracking-widest fill-orange-800">V / SERVICES</text>
+                </motion.g>
               </motion.g>
 
-              {/* LEAVES: KSH / SAAS - Left Branch */}
-              <motion.g onClick={() => setActiveSegment('ksh')} className="cursor-pointer group">
-                <motion.path d="M320 150 Q250 120 180 150 Q250 180 320 150" fill="#2563eb" className="drop-shadow-lg" whileHover={{ scale: 1.05 }} />
-                <text x="250" y="153" textAnchor="middle" className="text-[10px] font-black uppercase tracking-widest fill-white">KSH / SAAS</text>
+              {/* ROOTS: CORE (NIR) - Left */}
+              <motion.g 
+                onClick={() => setActiveSegment('core')} 
+                className="cursor-pointer group"
+                variants={drawPathVariants}
+              >
+                <motion.path variants={drawPathVariants} d="M250 500 Q200 520 180 580 M250 500 Q230 540 210 580 M250 500 Q270 540 290 580" stroke="#064e3b" strokeWidth="12" fill="none" strokeLinecap="round" filter="url(#shadow3D)" />
+                <motion.path variants={drawPathVariants} d="M250 500 Q200 520 180 580 M250 500 Q230 540 210 580 M250 500 Q270 540 290 580" stroke="#059669" strokeWidth="8" fill="none" strokeLinecap="round" filter="url(#innerGlow)" />
+                <motion.circle variants={popVariants} cx="250" cy="540" r="80" fill="url(#rootInner)" className="mix-blend-multiply" />
+                <motion.g variants={popVariants} className="group-hover:translate-y-[-5px] transition-transform duration-300">
+                  <rect x="180" y="520" width="140" height="40" rx="20" fill="white" filter="url(#shadow3D)" />
+                  <rect x="180" y="520" width="140" height="40" rx="20" fill="white" stroke="#10b981" strokeWidth="2" />
+                  <text x="250" y="545" textAnchor="middle" className="text-[12px] font-black uppercase tracking-widest fill-emerald-800">0 → 1 CORE</text>
+                </motion.g>
               </motion.g>
 
-              {/* LEAVES: ERP - Right Branch */}
-              <motion.g onClick={() => setActiveSegment('ksh')} className="cursor-pointer group">
-                <motion.path d="M480 150 Q550 120 620 150 Q550 180 480 150" fill="#dc2626" className="drop-shadow-lg" whileHover={{ scale: 1.05 }} />
-                <text x="550" y="153" textAnchor="middle" className="text-[10px] font-black uppercase tracking-widest fill-white">RI / ERP</text>
+              {/* ROOTS: GROWTH - Right */}
+              <motion.g 
+                onClick={() => setActiveSegment('growth')} 
+                className="cursor-pointer group"
+                variants={drawPathVariants}
+              >
+                <motion.path variants={drawPathVariants} d="M550 500 Q500 520 480 580 M550 500 Q570 540 590 580 M550 500 Q550 540 550 580" stroke="#78350f" strokeWidth="12" fill="none" strokeLinecap="round" filter="url(#shadow3D)" />
+                <motion.path variants={drawPathVariants} d="M550 500 Q500 520 480 580 M550 500 Q570 540 590 580 M550 500 Q550 540 550 580" stroke="#d97706" strokeWidth="8" fill="none" strokeLinecap="round" filter="url(#innerGlow)" />
+                <motion.g variants={popVariants} className="group-hover:translate-y-[-5px] transition-transform duration-300">
+                  <rect x="480" y="520" width="140" height="40" rx="20" fill="white" filter="url(#shadow3D)" />
+                  <rect x="480" y="520" width="140" height="40" rx="20" fill="white" stroke="#f59e0b" strokeWidth="2" />
+                  <text x="550" y="545" textAnchor="middle" className="text-[12px] font-black uppercase tracking-widest fill-amber-800">SCALE GROWTH</text>
+                </motion.g>
               </motion.g>
 
-              {/* TOP FLOWER: BRAND CENTER */}
-              <motion.g className="pointer-events-none">
-                <circle cx="400" cy="80" r="30" fill="white" stroke="#1e293b" strokeWidth="3" />
-                <text x="400" y="85" textAnchor="middle" className="text-[12px] font-black uppercase tracking-tighter fill-slate-900">NIRVRIKSH</text>
+              {/* LEAVES: KSH / SAAS - Left Branch 3D Cloud */}
+              <motion.g 
+                onClick={() => setActiveSegment('ksh')} 
+                className="cursor-pointer group"
+                variants={popVariants}
+                whileHover="hover"
+                initial="rest"
+                animate={["rest", "visible"]}
+              >
+                {/* Continuously floating bounding group */}
+                <motion.g variants={floatContinuous} style={{ transformOrigin: "250px 150px" }}>
+                  <motion.g variants={floatVariants}>
+                    {/* 3D Leaf Cloud */}
+                    <path d="M340 150 C340 70 200 70 160 120 C100 130 140 220 200 210 C240 240 340 220 340 150 Z" fill="#14532d" filter="url(#shadow3D)" />
+                    <path d="M340 150 C340 70 200 70 160 120 C100 130 140 220 200 210 C240 240 340 220 340 150 Z" fill="url(#leafGrad3D)" filter="url(#innerGlow)" />
+                    <g transform="translate(0, -10)">
+                      <rect x="180" y="140" width="140" height="36" rx="18" fill="white" filter="url(#shadow3D)" />
+                      <text x="250" y="163" textAnchor="middle" className="text-[12px] font-black uppercase tracking-widest fill-emerald-900">KSH / SAAS</text>
+                    </g>
+                  </motion.g>
+                </motion.g>
               </motion.g>
-            </svg>
+
+              {/* LEAVES: ERP - Right Branch 3D Cloud */}
+              <motion.g 
+                onClick={() => setActiveSegment('ksh')} 
+                className="cursor-pointer group"
+                variants={popVariants}
+                whileHover="hover"
+                initial="rest"
+                animate={["rest", "visible"]}
+              >
+                 <motion.g variants={floatContinuous} style={{ transformOrigin: "550px 150px" }}>
+                  <motion.g variants={floatVariants}>
+                    {/* 3D ERP Cloud */}
+                    <path d="M460 150 C460 70 600 70 640 120 C700 130 660 220 600 210 C560 240 460 220 460 150 Z" fill="#1e3a8a" filter="url(#shadow3D)" />
+                    <path d="M460 150 C460 70 600 70 640 120 C700 130 660 220 600 210 C560 240 460 220 460 150 Z" fill="url(#erpGrad3D)" filter="url(#innerGlow)" />
+                    <g transform="translate(0, -10)">
+                      <rect x="480" y="140" width="140" height="36" rx="18" fill="white" filter="url(#shadow3D)" />
+                      <text x="550" y="163" textAnchor="middle" className="text-[12px] font-black uppercase tracking-widest fill-blue-900">RI / ERP</text>
+                    </g>
+                  </motion.g>
+                </motion.g>
+              </motion.g>
+
+              {/* TOP FLOWER: BRAND CENTER - 3D Orb */}
+              <motion.g className="pointer-events-none" variants={popVariants}>
+                <motion.g variants={floatContinuous}>
+                  <circle cx="400" cy="80" r="45" fill="#f8fafc" filter="url(#shadow3D)" />
+                  <circle cx="400" cy="80" r="45" fill="white" filter="url(#innerGlow)" stroke="#94a3b8" strokeWidth="1" />
+                  <text x="400" y="85" textAnchor="middle" className="text-[14px] font-black uppercase tracking-tighter fill-slate-900 drop-shadow-sm">NIRVRIKSH</text>
+                </motion.g>
+              </motion.g>
+            </motion.svg>
           </div>
 
           {/* Action Pane Container */}

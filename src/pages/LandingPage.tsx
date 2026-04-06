@@ -10,10 +10,12 @@ import Footer from '../components/Footer';
 
 function LandingPage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-slate-50 font-sans">
       <Header />
       <HeroSection />
+      
       <BrandTree />
+
       <WorkflowSection />
       <TestimonialsSection />
 
