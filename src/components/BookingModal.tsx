@@ -26,18 +26,22 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
         setError('');
 
         try {
-            const response = await fetch('http://localhost:3001/api/leads', {
+            // Send to SheetDB API
+            const response = await fetch('https://sheetdb.io/api/v1/vxa04y3eo2icm', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    name: formData.name,
-                    email: formData.email,
-                    mobile: formData.mobile,
-                    storeName: formData.storeName,
-                    problems: [formData.problem],
-                    stage: 'audit-booking'
+                    data: {
+                        name: formData.name,
+                        email: formData.email,
+                        mobile: formData.mobile,
+                        storeName: formData.storeName,
+                        problem: formData.problem,
+                        stage: 'audit-booking',
+                        timestamp: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
+                    }
                 }),
             });
 
