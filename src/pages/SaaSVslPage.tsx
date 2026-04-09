@@ -310,13 +310,16 @@ const SaaSVslPage = () => {
 
           {/* Video Player */}
           <div className="relative aspect-video bg-slate-900 rounded-3xl overflow-hidden mb-6">
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-center">
-                <div className="w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center cursor-pointer hover:bg-blue-700 transition-colors mx-auto mb-4">
-                  <Play className="h-8 w-8 text-white fill-white ml-1" />
-                </div>
-              </div>
-            </div>
+            <iframe
+              width="100%"
+              height="100%"
+              src="https://www.youtube.com/embed/iiipE0WXrdY"
+              title="Stock Certainty System — VSL"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+              className="absolute inset-0 w-full h-full"
+            ></iframe>
           </div>
 
           <div className="bg-slate-50 p-6 rounded-2xl inline-block">
