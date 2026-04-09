@@ -7,10 +7,12 @@ const db = new sqlite3.Database(dbPath, (err) => {
     console.error('Error opening database', err.message);
   } else {
     console.log('Connected to the SQLite database.');
-    
+
     // Create leads table
     db.run(`CREATE TABLE IF NOT EXISTS leads (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT,
+      email TEXT,
       mobile TEXT,
       storeName TEXT,
       problems TEXT,

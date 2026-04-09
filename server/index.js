@@ -16,15 +16,15 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
-// Capture a new lead from RCA Game
+// Capture a new lead from RCA Game or Audit Form
 app.post('/api/leads', (req, res) => {
-  const { mobile, storeName, problems, stage } = req.body;
+  const { name, email, mobile, storeName, problems, stage } = req.body;
   if (!mobile) {
     return res.status(400).json({ error: 'Mobile number is required' });
   }
 
-  const query = `INSERT INTO leads (mobile, storeName, problems, stage) VALUES (?, ?, ?, ?)`;
-  db.run(query, [mobile, storeName, JSON.stringify(problems || []), stage], function(err) {
+  const query = `INSERT INTO leads (name, email, mobile, storeName, problems, stage) VALUES (?, ?, ?, ?, ?, ?)`;
+  db.run(query, [name || null, email || null, mobile, storeName, JSON.stringify(problems || []), stage], function (err) {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
@@ -35,12 +35,12 @@ app.post('/api/leads', (req, res) => {
 // Admin Login
 app.post('/api/login', (req, res) => {
   const { email, password } = req.body;
-  
+
   if (email === 'admin@nirvriksh.com' && password === 'Aakash@9353') {
     const token = jwt.sign({ email }, JWT_SECRET, { expiresIn: '2h' });
     return res.json({ token });
   }
-  
+
   return res.status(401).json({ error: 'Invalid credentials' });
 });
 
@@ -48,9 +48,9 @@ app.post('/api/login', (req, res) => {
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
-  
+
   if (!token) return res.sendStatus(401);
-  
+
   jwt.verify(token, JWT_SECRET, (err, user) => {
     if (err) return res.sendStatus(403);
     req.user = user;
@@ -65,13 +65,13 @@ app.get('/api/leads', authenticateToken, (req, res) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    
+
     // Parse json back to array for problems
     const leads = rows.map(r => ({
       ...r,
       problems: r.problems ? JSON.parse(r.problems) : []
     }));
-    
+
     res.json(leads);
   });
 });

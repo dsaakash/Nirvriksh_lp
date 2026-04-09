@@ -1,24 +1,12 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { 
-  Play, 
-  CheckCircle2, 
-  AlertTriangle, 
-  TrendingUp, 
-  ShieldCheck, 
-  ArrowRight, 
-  Zap,
-  BarChart3,
-  ChevronRight,
-  Target,
-  Clock
-} from 'lucide-react';
+import { Play, ArrowRight, ChevronRight, BarChart3 } from 'lucide-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import BookingModal from '../components/BookingModal';
 
 
-/* --- Quiz Component --- */
-const LeakageQuiz = () => {
+/* --- Stock Audit Quiz Component --- */
+const StockAuditQuiz = ({ onBookingClick }: { onBookingClick: () => void }) => {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [result, setResult] = useState<any>(null);
@@ -26,15 +14,17 @@ const LeakageQuiz = () => {
   const questions = [
     {
       q: "What is your approximate annual revenue?",
+      hint: "Apna yearly turnover batao",
       options: [
         { label: "₹30L – ₹50L", value: 4000000 },
         { label: "₹50L – ₹80L", value: 6500000 },
         { label: "₹80L – ₹1.2Cr", value: 10000000 },
-        { label: "₹1.2Cr – ₹1.5Cr+", value: 13500000 },
+        { label: "₹1.2Cr+", value: 13500000 },
       ],
     },
     {
       q: "Does your system stock match physical stock?",
+      hint: "Kya aapka billing software aur actual stock match karta hai?",
       options: [
         { label: "Mostly matches (< 5% gap)", value: 5 },
         { label: "Noticeable gap (5–10%)", value: 8 },
@@ -44,6 +34,7 @@ const LeakageQuiz = () => {
     },
     {
       q: "Do you use manual registers alongside billing software?",
+      hint: "Kya aap software ke saath manual register bhi use karte ho?",
       options: [
         { label: "No, fully digital", value: 0 },
         { label: "Yes, some manual backup", value: 1 },
@@ -52,6 +43,7 @@ const LeakageQuiz = () => {
     },
     {
       q: "How long does daily reconciliation take?",
+      hint: "Roz stock match karne mein kitna time lagta hai?",
       options: [
         { label: "Under 15 minutes", value: 0 },
         { label: "30 minutes to 1 hour", value: 1 },
@@ -61,6 +53,7 @@ const LeakageQuiz = () => {
     },
     {
       q: "If your key staff member leaves tomorrow, what happens?",
+      hint: "Agar aapka main staff member kal chala jaye?",
       options: [
         { label: "Systems continue smoothly", value: 0 },
         { label: "Some disruption, but manageable", value: 1 },
@@ -95,64 +88,89 @@ const LeakageQuiz = () => {
 
   if (result) {
     return (
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="glass-premium p-8 rounded-[2rem] border border-blue-100 shadow-xl max-w-2xl mx-auto"
-      >
-        <div className="flex items-center gap-3 mb-6">
-          <div className="p-3 bg-red-100 rounded-2xl">
-            <BarChart3 className="h-6 w-6 text-red-600" />
+      <div className="bg-white p-10 rounded-3xl border-2 border-slate-200 max-w-3xl mx-auto">
+        <div className="flex items-center gap-4 mb-8">
+          <div className="p-4 bg-red-50 rounded-2xl">
+            <BarChart3 className="h-8 w-8 text-red-600" />
           </div>
-          <h3 className="text-2xl font-black text-slate-900">Your Leakage Report</h3>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-          <div className="p-6 bg-slate-50 rounded-2xl border border-slate-100">
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-widest block mb-1">Annual Leakage</span>
-            <span className="text-2xl font-black text-red-600">₹{result.annualLeakage.toLocaleString("en-IN")}</span>
-          </div>
-          <div className="p-6 bg-slate-50 rounded-2xl border border-slate-100">
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-widest block mb-1">Daily Loss</span>
-            <span className="text-2xl font-black text-red-500">₹{result.dailyLeakage.toLocaleString("en-IN")}</span>
+          <div>
+            <h3 className="text-3xl font-bold text-slate-900">Your Stock Audit Report</h3>
+            <p className="text-slate-600">Based on your answers</p>
           </div>
         </div>
-        <p className="text-slate-600 mb-8 font-medium leading-relaxed">
-          Your store is leaking approximately <strong className="text-slate-900">₹{result.dailyLeakage.toLocaleString("en-IN")}/day</strong>. 
-          Our system pays for itself in less than <strong className="text-emerald-600">{result.paybackDays} days</strong>.
-        </p>
-        <a 
-          href="https://calendly.com/nirvriksh/meet-up"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="w-full py-4 bg-blue-600 text-white rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-blue-700 transition-all shadow-lg shadow-blue-200"
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="bg-slate-50 p-6 rounded-2xl text-center">
+            <span className="text-sm font-semibold text-slate-500 uppercase tracking-wider block mb-2">Annual Leakage</span>
+            <span className="text-3xl font-bold text-red-600">₹{result.annualLeakage.toLocaleString("en-IN")}</span>
+          </div>
+          <div className="bg-slate-50 p-6 rounded-2xl text-center">
+            <span className="text-sm font-semibold text-slate-500 uppercase tracking-wider block mb-2">Monthly Loss</span>
+            <span className="text-3xl font-bold text-red-500">₹{result.monthlyLeakage.toLocaleString("en-IN")}</span>
+          </div>
+          <div className="bg-slate-50 p-6 rounded-2xl text-center">
+            <span className="text-sm font-semibold text-slate-500 uppercase tracking-wider block mb-2">Daily Loss</span>
+            <span className="text-3xl font-bold text-red-500">₹{result.dailyLeakage.toLocaleString("en-IN")}</span>
+          </div>
+        </div>
+
+        <div className="bg-blue-50 p-8 rounded-2xl border border-blue-200 mb-8">
+          <h4 className="text-xl font-bold text-slate-900 mb-3">What This Means</h4>
+          <p className="text-slate-700 leading-relaxed mb-4">
+            Your store is leaking approximately <strong className="text-slate-900">₹{result.dailyLeakage.toLocaleString("en-IN")} per day</strong> due to stock mismatch and control gaps.
+          </p>
+          <p className="text-slate-700 leading-relaxed">
+            Our Stock Certainty System (₹85,000 one-time) pays for itself in approximately <strong className="text-emerald-600">{result.paybackDays} days</strong>.
+          </p>
+        </div>
+
+        <button
+          onClick={onBookingClick}
+          className="w-full py-5 bg-blue-600 text-white rounded-xl font-semibold text-lg flex items-center justify-center gap-2 hover:bg-blue-700 transition-colors"
         >
-          Stop the Bleeding — Book Audit
+          Book Free Store Audit Call
           <ArrowRight className="h-5 w-5" />
-        </a>
-      </motion.div>
+        </button>
+        <p className="text-center text-sm text-slate-500 mt-4">
+          30-minute call · No sales pressure · Get your detailed roadmap
+        </p>
+      </div>
     );
   }
 
   return (
-    <div className="max-w-2xl mx-auto glass-premium p-8 rounded-[2rem] border border-slate-100 shadow-lg">
-      <div className="w-full bg-slate-100 h-2 rounded-full mb-8 overflow-hidden">
-        <motion.div 
-          className="bg-blue-600 h-full"
-          initial={{ width: 0 }}
-          animate={{ width: `${((step + 1) / questions.length) * 100}%` }}
-        />
+    <div className="max-w-3xl mx-auto bg-white p-10 rounded-3xl border-2 border-slate-200">
+      <div className="mb-8">
+        <div className="flex items-center justify-between mb-4">
+          <span className="text-sm font-semibold text-blue-600 uppercase tracking-wider">
+            Question {step + 1} of {questions.length}
+          </span>
+          <span className="text-sm text-slate-500">
+            {Math.round(((step + 1) / questions.length) * 100)}% Complete
+          </span>
+        </div>
+        <div className="w-full bg-slate-100 h-3 rounded-full overflow-hidden">
+          <div
+            className="bg-blue-600 h-full transition-all duration-300 rounded-full"
+            style={{ width: `${((step + 1) / questions.length) * 100}%` }}
+          />
+        </div>
       </div>
-      <span className="text-sm font-bold text-blue-600 uppercase tracking-widest block mb-2">Step {step + 1} of {questions.length}</span>
-      <h3 className="text-2xl font-black text-slate-900 mb-8 leading-tight">{questions[step].q}</h3>
-      <div className="space-y-3">
+
+      <h3 className="text-2xl md:text-3xl font-bold text-slate-900 mb-3 leading-tight">
+        {questions[step].q}
+      </h3>
+      <p className="text-slate-600 mb-8 italic">{questions[step].hint}</p>
+
+      <div className="space-y-4">
         {questions[step].options.map((opt, i) => (
           <button
             key={i}
             onClick={() => handleAnswer(opt.value)}
-            className="w-full text-left p-5 rounded-2xl border border-slate-100 bg-white hover:border-blue-500 hover:bg-blue-50 transition-all font-bold text-slate-700 flex items-center justify-between group"
+            className="w-full text-left p-6 rounded-2xl border-2 border-slate-200 bg-white hover:border-blue-500 hover:bg-blue-50 transition-all font-semibold text-slate-700 text-lg flex items-center justify-between group"
           >
-            {opt.label}
-            <ChevronRight className="h-4 w-4 text-slate-300 group-hover:text-blue-500 transform group-hover:translate-x-1 transition-all" />
+            <span>{opt.label}</span>
+            <ChevronRight className="h-5 w-5 text-slate-300 group-hover:text-blue-500 group-hover:translate-x-1 transition-all" />
           </button>
         ))}
       </div>
@@ -161,196 +179,373 @@ const LeakageQuiz = () => {
 };
 
 const SaaSVslPage = () => {
+  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
+
   return (
     <div className="bg-white min-h-screen">
       <Header />
-      
-      {/* --- HERO SECTION --- */}
-      <section className="pt-32 pb-24 relative overflow-hidden">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[600px] bg-gradient-to-b from-blue-50 to-transparent pointer-events-none -z-10" />
-        <div className="container mx-auto px-4">
-          <div className="text-center max-w-4xl mx-auto mb-16">
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="inline-flex items-center px-4 py-2 rounded-full bg-red-50 text-red-700 mb-8 border border-red-100"
-            >
-              <AlertTriangle className="h-4 w-4 mr-2" />
-              <span className="text-sm font-bold uppercase tracking-widest">Only 3 Slots Left for Next Month</span>
-            </motion.div>
-            <h1 className="text-5xl md:text-7xl font-black text-slate-900 mb-8 leading-tight tracking-tight">
-              Your Store Is a <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-500">Leaking Bucket.</span><br />
-              Stop the Profit Bleed.
+
+      <BookingModal
+        isOpen={isBookingModalOpen}
+        onClose={() => setIsBookingModalOpen(false)}
+      />
+
+      {/* HERO SECTION */}
+      <section className="pt-32 pb-20">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <div className="text-center">
+            <h1 className="text-5xl md:text-7xl font-bold text-slate-900 mb-8 leading-tight">
+              Stock Certainty System
             </h1>
-            <p className="text-xl md:text-2xl text-slate-600 font-medium leading-relaxed max-w-3xl mx-auto mb-12">
-              We fix stock mismatch in clothing stores in 30 days — permanently. No expensive ERP. No extra staff. Just absolute control.
+
+            <h2 className="text-3xl md:text-5xl font-bold text-slate-900 mb-6">
+              Same stock.
+            </h2>
+            <h2 className="text-3xl md:text-5xl font-bold text-slate-900 mb-8">
+              Complete control.
+            </h2>
+
+            <p className="text-xl md:text-2xl text-slate-600 mb-12 max-w-3xl mx-auto leading-relaxed">
+              Aapka stock already hai. Bas ek proper system nahi hai — jo track kare, match kare, aur control de. Yahi hai Stock Certainty System.
             </p>
-            
-            {/* VSL VIDEO PLACEHOLDER */}
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2 }}
-              className="relative aspect-video max-w-4xl mx-auto rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white bg-slate-900 group"
-            >
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-center">
-                  <motion.div 
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    className="w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center cursor-pointer shadow-xl shadow-blue-500/40"
-                  >
-                    <Play className="h-8 w-8 text-white fill-white ml-1" />
-                  </motion.div>
-                  <p className="text-white/60 mt-4 font-bold uppercase tracking-widest text-xs">Watch the Strategy (3:45)</p>
-                </div>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+              <button
+                onClick={() => setIsBookingModalOpen(true)}
+                className="px-8 py-4 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors"
+              >
+                Take Free Stock Audit
+              </button>
+              <button className="px-8 py-4 text-slate-700 font-semibold hover:text-blue-600 transition-colors flex items-center gap-2">
+                Watch the Video <span className="text-xl">↓</span>
+              </button>
+            </div>
+
+            {/* Stats Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+              <div className="text-center">
+                <div className="text-5xl font-bold text-slate-900 mb-2">2×</div>
+                <p className="text-slate-600">control without new systems</p>
               </div>
-              {/* Overlay graphics */}
-              <div className="absolute bottom-6 left-6 right-6 flex justify-between items-center bg-black/40 backdrop-blur-md p-4 rounded-2xl border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity">
-                <span className="text-white text-sm font-bold">RCA Concept: Stock Certainty System™</span>
-                <span className="text-white/60 text-xs">03:45 / 03:45</span>
+              <div className="text-center">
+                <div className="text-5xl font-bold text-slate-900 mb-2">30</div>
+                <p className="text-slate-600">days to see measurable results</p>
               </div>
-            </motion.div>
+              <div className="text-center">
+                <div className="text-5xl font-bold text-slate-900 mb-2">6</div>
+                <p className="text-slate-600">step system: audit, fix, control</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* --- LEAKAGE CALCULATOR --- */}
-      <section className="py-24 bg-slate-50" id="calculator">
-        <div className="container mx-auto px-4">
+      {/* THE REAL PROBLEM */}
+      <section className="py-20 bg-slate-50">
+        <div className="container mx-auto px-4 max-w-6xl">
+          <div className="mb-16">
+            <h2 className="text-4xl md:text-6xl font-bold text-slate-900 mb-6">
+              The Real Problem
+            </h2>
+            <p className="text-xl md:text-2xl text-slate-600 max-w-3xl">
+              Aap stock laane mein busy ho — jabki mismatch quietly ho raha hai
+            </p>
+          </div>
+
+          <p className="text-lg text-slate-600 mb-12 max-w-3xl">
+            Most store owners zyada stock, zyada variety — yahi sochte hain solution hai. Reality mein problem tracking ki hai, quantity ki nahi.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="bg-white p-8 rounded-2xl">
+              <div className="text-5xl font-bold text-slate-900 mb-3">70%</div>
+              <h3 className="text-xl font-bold text-slate-900 mb-3">Dead Stock Trap</h3>
+              <p className="text-slate-600 leading-relaxed">
+                Retail stores apna paisa slow-moving inventory mein lock kar dete hain jab ki fresh stock ki zarurat hoti hai.
+              </p>
+            </div>
+
+            <div className="bg-white p-8 rounded-2xl">
+              <div className="text-5xl font-bold text-slate-900 mb-3">60%</div>
+              <h3 className="text-xl font-bold text-slate-900 mb-3">Stock Mismatch</h3>
+              <p className="text-slate-600 leading-relaxed">
+                System mein kuch aur, physical count mein kuch aur. No tracking = no improvement.
+              </p>
+            </div>
+
+            <div className="bg-white p-8 rounded-2xl">
+              <div className="text-5xl font-bold text-slate-900 mb-3">∞</div>
+              <h3 className="text-xl font-bold text-slate-900 mb-3">Manual Chaos</h3>
+              <p className="text-slate-600 leading-relaxed">
+                Billing software hai lekin manual register bhi. Two systems = double confusion.
+              </p>
+            </div>
+
+            <div className="bg-white p-8 rounded-2xl">
+              <div className="text-5xl font-bold text-slate-900 mb-3">0</div>
+              <h3 className="text-xl font-bold text-slate-900 mb-3">No Tracking System</h3>
+              <p className="text-slate-600 leading-relaxed">
+                Kaunsa item fast move karta hai? Kaunsa dead hai? Koi data nahi = koi control nahi.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* WATCH THIS FIRST */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <div className="mb-12">
+            <h2 className="text-4xl md:text-6xl font-bold text-slate-900 mb-6">
+              Watch This First
+            </h2>
+            <p className="text-xl md:text-2xl text-slate-600">
+              3 minutes mein samjho kya fix karna hai
+            </p>
+          </div>
+
+          <p className="text-lg text-slate-600 mb-12 max-w-3xl">
+            Yeh video sirf retail store owners ke liye hai jinke paas already stock hai — lekin control consistent nahi hai.
+          </p>
+
+          {/* Video Player */}
+          <div className="relative aspect-video bg-slate-900 rounded-3xl overflow-hidden mb-6">
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="text-center">
+                <div className="w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center cursor-pointer hover:bg-blue-700 transition-colors mx-auto mb-4">
+                  <Play className="h-8 w-8 text-white fill-white ml-1" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-slate-50 p-6 rounded-2xl inline-block">
+            <p className="font-semibold text-slate-900">Stock Certainty System — VSL</p>
+            <p className="text-sm text-slate-600">2 MIN 58 SEC · HINDI-ENGLISH</p>
+          </div>
+        </div>
+      </section>
+
+      {/* THE SYSTEM */}
+      <section className="py-20 bg-slate-50">
+        <div className="container mx-auto px-4 max-w-6xl">
+          <div className="mb-16">
+            <h2 className="text-4xl md:text-6xl font-bold text-slate-900 mb-6">
+              The System
+            </h2>
+            <p className="text-xl md:text-2xl text-slate-600">
+              6 layers jo milke control certainty dete hain
+            </p>
+          </div>
+
+          <p className="text-lg text-slate-600 mb-12 max-w-3xl">
+            Stock Certainty System ek complete audit → fix → control engine hai — built specifically for clothing and retail stores.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="bg-white p-8 rounded-2xl">
+              <div className="text-4xl mb-4">📊</div>
+              <h3 className="text-xl font-bold text-slate-900 mb-3">Control Gap Audit</h3>
+              <p className="text-slate-600 leading-relaxed mb-4">
+                System stock vs physical stock — exact mismatch measurement. Your leakage in Rupees.
+              </p>
+              <p className="text-sm font-semibold text-blue-600">Measure everything</p>
+            </div>
+
+            <div className="bg-white p-8 rounded-2xl">
+              <div className="text-4xl mb-4">⚡</div>
+              <h3 className="text-xl font-bold text-slate-900 mb-3">Foundation Reset</h3>
+              <p className="text-slate-600 leading-relaxed mb-4">
+                Clean SKU structure. Categories, naming, colors. Remove duplicates. Reliable baseline.
+              </p>
+              <p className="text-sm font-semibold text-blue-600">Clean foundation</p>
+            </div>
+
+            <div className="bg-white p-8 rounded-2xl">
+              <div className="text-4xl mb-4">🔒</div>
+              <h3 className="text-xl font-bold text-slate-900 mb-3">Entry Lock</h3>
+              <p className="text-slate-600 leading-relaxed mb-4">
+                No stock enters without digital verification. Gatekeeper for incoming inventory.
+              </p>
+              <p className="text-sm font-semibold text-blue-600">Control entry</p>
+            </div>
+
+            <div className="bg-white p-8 rounded-2xl">
+              <div className="text-4xl mb-4">✅</div>
+              <h3 className="text-xl font-bold text-slate-900 mb-3">Sales Deduction</h3>
+              <p className="text-slate-600 leading-relaxed mb-4">
+                Every sale automatically reduces stock. No manual adjustments. Real-time accuracy.
+              </p>
+              <p className="text-sm font-semibold text-blue-600">Auto deduction</p>
+            </div>
+
+            <div className="bg-white p-8 rounded-2xl">
+              <div className="text-4xl mb-4">📱</div>
+              <h3 className="text-xl font-bold text-slate-900 mb-3">Single System</h3>
+              <p className="text-slate-600 leading-relaxed mb-4">
+                Remove manual registers. One digital truth. No parallel Excel or paper logs.
+              </p>
+              <p className="text-sm font-semibold text-blue-600">One source of truth</p>
+            </div>
+
+            <div className="bg-white p-8 rounded-2xl">
+              <div className="text-4xl mb-4">📈</div>
+              <h3 className="text-xl font-bold text-slate-900 mb-3">Owner Dashboard</h3>
+              <p className="text-slate-600 leading-relaxed mb-4">
+                10-minute daily visibility. YOU verify independently. Full transparency.
+              </p>
+              <p className="text-sm font-semibold text-blue-600">Daily control</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* THE MATH */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <div className="mb-16">
+            <h2 className="text-4xl md:text-6xl font-bold text-slate-900 mb-6">
+              The Math
+            </h2>
+            <p className="text-xl md:text-2xl text-slate-600">
+              Simple numbers. Serious results.
+            </p>
+          </div>
+
+          <p className="text-lg text-slate-600 mb-12 max-w-3xl">
+            Yeh koi projection nahi hai. Yeh simple math hai — jab aap existing stock ko properly track aur control karo.
+          </p>
+
+          <div className="flex flex-col md:flex-row items-center justify-center gap-8 mb-12">
+            <div className="bg-slate-50 p-8 rounded-2xl text-center min-w-[250px]">
+              <p className="text-sm font-semibold text-slate-600 mb-2">Without System</p>
+              <div className="text-6xl font-bold text-slate-900 mb-2">60%</div>
+              <p className="text-slate-600">stock accuracy rate</p>
+            </div>
+
+            <div className="text-4xl text-slate-400">↓</div>
+
+            <div className="bg-blue-50 p-8 rounded-2xl text-center min-w-[250px] border-2 border-blue-200">
+              <p className="text-sm font-semibold text-blue-600 mb-2">With System</p>
+              <div className="text-6xl font-bold text-blue-600 mb-2">95%</div>
+              <p className="text-slate-600">stock accuracy rate</p>
+            </div>
+          </div>
+
+          <div className="bg-slate-50 p-8 rounded-2xl max-w-2xl mx-auto">
+            <ul className="space-y-3 text-lg text-slate-700">
+              <li>✓ Same stock</li>
+              <li>✓ No new systems</li>
+              <li>✓ No heavy investment</li>
+              <li>✓ 2× control</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* HONEST ANSWER */}
+      <section className="py-20 bg-slate-50">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <div className="mb-16">
+            <h2 className="text-4xl md:text-6xl font-bold text-slate-900 mb-6">
+              Honest Answer
+            </h2>
+            <p className="text-xl md:text-2xl text-slate-600">
+              Aapka sawaal aur seedha jawab
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="bg-white p-10 rounded-2xl">
+              <h3 className="text-2xl font-bold text-slate-900 mb-4">
+                Store Owner Sochta Hai
+              </h3>
+              <p className="text-lg text-slate-600 italic leading-relaxed">
+                "Yeh sab sunne mein accha lagta hai… lekin kya ye mere store ke liye actually kaam karega?"
+              </p>
+            </div>
+
+            <div className="bg-blue-50 p-10 rounded-2xl border border-blue-100">
+              <h3 className="text-2xl font-bold text-slate-900 mb-4">
+                Seedha Jawab
+              </h3>
+              <p className="text-lg text-slate-600 leading-relaxed mb-4">
+                Agar aapke paas already stock hai aur consistently match nahi ho raha — toh aapka case clear hai.
+              </p>
+              <ul className="space-y-2 text-lg text-slate-700 mb-4">
+                <li>• capture nahi ho raha</li>
+                <li>• track nahi ho raha</li>
+                <li>• control nahi ho raha</li>
+              </ul>
+              <p className="text-lg text-slate-600 leading-relaxed">
+                System fix karna guesswork nahi hai. Yeh ek structured process hai — jo har store mein apply hoti hai jahan stock exist karta hai.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* STOCK AUDIT CALCULATOR */}
+      <section id="audit" className="py-20 bg-white">
+        <div className="container mx-auto px-4 max-w-6xl">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-6">Calculate Your <span className="text-blue-600">Chaos Tax</span></h2>
-            <p className="text-lg text-slate-500 font-medium">Answer 5 questions to find your store's annual hidden leakage.</p>
-          </div>
-          <LeakageQuiz />
-        </div>
-      </section>
-
-      {/* --- THE SYSTEM --- */}
-      <section className="py-24 relative">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-20">
-              <span className="text-blue-600 font-black uppercase tracking-[0.25em] text-sm mb-4 block">The Blueprint</span>
-              <h2 className="text-4xl md:text-6xl font-black text-slate-900 mb-8 leading-tight">
-                The 30-Day Stock <br />Certainty System™
-              </h2>
-              <p className="text-xl text-slate-600 font-medium italic">"We fix behavior, not just numbers."</p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {[
-                { step: "01", title: "Control Gap Audit™", desc: "We measure your REAL mismatch. System stock vs physical stock. Your exact leakage in Rupees.", icon: <Target className="h-6 w-6" /> },
-                { step: "02", title: "Foundation Reset", desc: "Clean SKU structure. Naming, categories, colors. Remove duplicates. Reliable data baseline.", icon: <Zap className="h-6 w-6" /> },
-                { step: "03", title: "Entry Lock™", desc: "No stock enters the store without digital verification. Your gatekeeper for incoming inventory.", icon: <ShieldCheck className="h-6 w-6" /> },
-                { step: "04", title: "Sales Deduction Lock", desc: "Every sale automatically reduces stock. No manual adjustments. Real-time accuracy.", icon: <Clock className="h-6 w-6" /> },
-
-                { step: "05", title: "Single System Force", desc: "Remove manual registers. One digital truth. No parallel Excel sheets or paper logs.", icon: <TrendingUp className="h-6 w-6" /> },
-                { step: "06", title: "Owner Dashboard", desc: "10-minute daily visibility. YOU verify everything independently. Full operational transparency.", icon: <CheckCircle2 className="h-6 w-6" /> }
-              ].map((item, i) => (
-                <motion.div 
-                  key={i}
-                  whileHover={{ y: -5 }}
-                  className="glass-premium p-8 rounded-3xl border border-slate-100 hover:border-blue-200 transition-all"
-                >
-                  <span className="text-4xl font-black text-blue-100 mb-4 block">{item.step}</span>
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="p-2 bg-blue-50 rounded-lg text-blue-600">{item.icon}</div>
-                    <h3 className="text-xl font-black text-slate-900">{item.title}</h3>
-                  </div>
-                  <p className="text-slate-500 font-medium leading-relaxed">{item.desc}</p>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* --- THE OFFER --- */}
-      <section className="py-24 bg-slate-900 text-white overflow-hidden relative">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600 rounded-full blur-[150px] opacity-20 -mr-48 -mt-48" />
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-6xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-              <div>
-                <h2 className="text-5xl md:text-7xl font-black mb-8">The Complete RCA <br /><span className="text-blue-500">Installation Offer</span></h2>
-                <p className="text-xl text-slate-400 mb-12 leading-relaxed font-medium">
-                  You aren't paying for a tool. You're paying to stop the bleeding. 
-                  Get the full Stock Certainty System™ installed by our team.
-                </p>
-                <div className="space-y-6 mb-12">
-                  {[
-                    "Full Operational Control Gap Audit",
-                    "Inventory Structure Refactor",
-                    "Supplier & Sales Entry Verification",
-                    "30-Day Discipline Implementation",
-                    "Owner Visibility Dashboard Setup",
-                    "Staff Compliance Rulebook™"
-                  ].map((item, i) => (
-                    <div key={i} className="flex items-center gap-4">
-                      <div className="p-1 bg-blue-500/20 rounded-full border border-blue-500/30">
-                        <CheckCircle2 className="h-5 w-5 text-blue-400" />
-                      </div>
-                      <span className="text-lg font-bold text-slate-200">{item}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="glass-premium p-10 bg-white/5 backdrop-blur-3xl rounded-[3rem] border border-white/10 shadow-2xl">
-                <div className="text-center mb-10">
-                  <span className="text-blue-400 font-black uppercase tracking-widest text-xs mb-4 block">Total Value: ₹97,000</span>
-                  <h3 className="text-3xl font-black mb-2">One-Time Setup</h3>
-                  <div className="text-6xl font-black text-white mb-2">₹85,000</div>
-                  <p className="text-slate-400 font-medium">No hidden upsells. No monthly fees.</p>
-                </div>
-                
-                <div className="p-6 bg-white/5 rounded-2xl border border-white/5 mb-10">
-                  <p className="text-sm text-slate-400 leading-relaxed italic">
-                    "If your Hidden Leakage Report shows less than ₹85,000 in annual impact — we tell you honestly and don't take your investment."
-                  </p>
-                </div>
-
-                <a 
-                  href="https://calendly.com/nirvriksh/meet-up"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full py-5 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-black text-xl flex items-center justify-center gap-2 transition-all shadow-xl shadow-blue-500/20 group"
-                >
-                  Schedule Your Audit
-                  <ArrowRight className="h-6 w-6 transform group-hover:translate-x-1 transition-transform" />
-                </a>
-                
-                <div className="mt-8 flex items-center justify-center gap-6">
-                  <div className="flex flex-col items-center">
-                    <ShieldCheck className="h-6 w-6 text-emerald-500 mb-1" />
-                    <span className="text-[10px] font-bold uppercase text-slate-500">Guaranteed Result</span>
-                  </div>
-                  <div className="w-px h-8 bg-white/10" />
-                  <div className="flex flex-col items-center">
-                    <TrendingUp className="h-6 w-6 text-blue-500 mb-1" />
-                    <span className="text-[10px] font-bold uppercase text-slate-500">ROI Focused</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* --- GUARANTEE --- */}
-      <section className="py-24 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto glass-premium p-12 bg-blue-50/50 rounded-[3rem] border border-blue-100 text-center relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-blue-100 rounded-full blur-3xl opacity-50 -mr-16 -mt-16" />
-            <ShieldCheck className="h-16 w-16 text-blue-600 mx-auto mb-8" />
-            <h2 className="text-4xl font-black text-slate-900 mb-6">The Stock Certainty Guarantee™</h2>
-            <p className="text-xl text-slate-600 font-medium mb-8 leading-relaxed">
-              If, after full 30-day compliance, your stock mismatch does not reduce measurably — 
-              <br className="hidden md:block" />
-              <strong className="text-slate-900">We continue working with you at ZERO additional fee until control is achieved.</strong>
+            <h2 className="text-4xl md:text-6xl font-bold text-slate-900 mb-6">
+              Free Stock Audit
+            </h2>
+            <p className="text-xl md:text-2xl text-slate-600 mb-4">
+              Calculate your exact leakage
             </p>
-            <p className="text-sm font-bold text-slate-400 uppercase tracking-widest italic">"I don't win unless you win."</p>
+            <p className="text-lg text-slate-500 max-w-2xl mx-auto">
+              Answer 5 quick questions to see how much your store is losing daily due to stock mismatch
+            </p>
+          </div>
+
+          <StockAuditQuiz onBookingClick={() => setIsBookingModalOpen(true)} />
+        </div>
+      </section>
+
+      {/* FREE STORE AUDIT CALL */}
+      <section className="py-20 bg-slate-900 text-white">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-6xl font-bold mb-6">
+              Free Store Audit Call
+            </h2>
+            <p className="text-xl md:text-2xl text-slate-300">
+              Same stock se 2×–3× control
+            </p>
+          </div>
+
+          <p className="text-lg text-slate-300 mb-12 max-w-3xl mx-auto text-center leading-relaxed">
+            Is call mein hum aapka stock breakdown karenge, exact leaks identify karenge, aur clear roadmap denge.
+          </p>
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-8 mb-12">
+            <div className="text-center">
+              <div className="text-6xl mb-2">✓</div>
+              <p className="text-slate-300">Koi sales pressure nahi</p>
+            </div>
+            <div className="text-center">
+              <div className="text-6xl mb-2">⏱️</div>
+              <p className="text-slate-300">30 min strategy session</p>
+            </div>
+            <div className="text-center">
+              <div className="text-6xl mb-2">📋</div>
+              <p className="text-slate-300">30-day roadmap</p>
+            </div>
+          </div>
+
+          <div className="text-center">
+            <button
+              onClick={() => setIsBookingModalOpen(true)}
+              className="inline-flex items-center gap-2 px-10 py-5 bg-blue-600 text-white rounded-xl font-semibold text-lg hover:bg-blue-700 transition-colors"
+            >
+              Book Your Free Call Now
+              <ArrowRight className="h-5 w-5" />
+            </button>
+            <p className="text-sm text-slate-400 mt-6">
+              Limited spots available · Clothing & retail stores only
+            </p>
           </div>
         </div>
       </section>
