@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Google Apps Script</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        button {
+            background: #2563eb;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #1d4ed8;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+        }
+        .success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #10b981;
+        }
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #ef4444;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test Google Apps Script Connection</h1>
+    <p>Click the button below to test if your Google Apps Script is working correctly.</p>
+    
+    <button onclick="testScript()">Test Apps Script</button>
+    
+    <div id="result"></div>
+
+    <script>
+        async function testScript() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            resultDiv.className = '';
+            resultDiv.textContent = 'Sending test data...';
+
+            const testData = {
+                revenue: '₹50L – ₹80L',
+                stockMatch: 'Noticeable gap (5–10%)',
+                manualRegister: 'Yes, some manual backup',
+                reconciliationTime: '1–2 hours',
+                staffDependency: 'Some disruption, but manageable',
+                name: 'Test User',
+                storeName: 'Test Store',
+                mobile: '9876543210',
+                email: 'test@example.com',
+                interested: 'Yes',
+                stage: 'completed',
+                timestamp: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
+            };
+
+            try {
+                const response = await fetch('https://script.google.com/macros/s/AKfycbyNKTvTjq2HKiRwbjyWvF6oOiO9vpqFSDoDszfypSq9zku9ZSGFYPsM8GvcSvRm0hu-/exec', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(testData),
+                    redirect: 'follow'
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    resultDiv.className = 'success';
+                    resultDiv.innerHTML = `
+                        <strong>✅ Success!</strong><br>
+                        Data was saved to your Google Sheet.<br>
+                        Check your sheet for a new row with test data.
+                    `;
+                } else {
+                    resultDiv.className = 'error';
+                    resultDiv.innerHTML = `
+                        <strong>❌ Error:</strong><br>
+                        ${result.error || 'Unknown error'}
+                    `;
+                }
+            } catch (error) {
+                resultDiv.className = 'error';
+                resultDiv.innerHTML = `
+                    <strong>❌ Network Error:</strong><br>
+                    ${error.message}<br><br>
+                    <strong>Possible issues:</strong><br>
+                    1. Apps Script not deployed as "Anyone" can access<br>
+                    2. CORS issue - try using mode: 'no-cors'<br>
+                    3. Wrong URL
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

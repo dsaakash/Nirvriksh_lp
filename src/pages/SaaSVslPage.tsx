@@ -3,6 +3,7 @@ import { Play, ArrowRight, ChevronRight, BarChart3 } from 'lucide-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import BookingModal from '../components/BookingModal';
+import CaseStudySection from '../components/CaseStudySection';
 
 
 /* --- Stock Audit Quiz Component --- */
@@ -216,9 +217,12 @@ const SaaSVslPage = () => {
               >
                 Take Free Stock Audit
               </button>
-              <button className="px-8 py-4 text-slate-700 font-semibold hover:text-blue-600 transition-colors flex items-center gap-2">
+              <a
+                href="#video"
+                className="px-8 py-4 text-slate-700 font-semibold hover:text-blue-600 transition-colors flex items-center gap-2"
+              >
                 Watch the Video <span className="text-xl">↓</span>
-              </button>
+              </a>
             </div>
 
             {/* Stats Grid */}
@@ -293,7 +297,7 @@ const SaaSVslPage = () => {
       </section>
 
       {/* WATCH THIS FIRST */}
-      <section className="py-20 bg-white">
+      <section id="video" className="py-20 bg-white">
         <div className="container mx-auto px-4 max-w-5xl">
           <div className="mb-12">
             <h2 className="text-4xl md:text-6xl font-bold text-slate-900 mb-6">
@@ -487,6 +491,9 @@ const SaaSVslPage = () => {
           </div>
         </div>
       </section>
+
+      {/* CASE STUDY SECTION */}
+      <CaseStudySection />
 
       {/* STOCK AUDIT CALCULATOR */}
       <section id="audit" className="py-20 bg-white">
