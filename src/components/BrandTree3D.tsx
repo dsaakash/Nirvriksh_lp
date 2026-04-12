@@ -129,7 +129,7 @@ const BrandTree3D = () => {
             <p className="text-xl md:text-2xl text-neutral-400 max-w-lg mx-auto leading-relaxed mb-8">
               The visible output. Niche SaaS products like <span className="text-white font-semibold">Retail Control Architect</span> that deliver immediate business value.
             </p>
-            <a href="/saas/rca/vsl" className="inline-flex items-center gap-2 px-8 py-4 bg-[#639922] hover:bg-[#507d18] text-white rounded-xl font-bold text-lg transition-all shadow-[0_0_30px_rgba(99,153,34,0.4)] hover:shadow-[0_0_50px_rgba(99,153,34,0.6)]">
+            <a href="/vsl/saas/rca" className="inline-flex items-center gap-2 px-8 py-4 bg-[#639922] hover:bg-[#507d18] text-white rounded-xl font-bold text-lg transition-all shadow-[0_0_30px_rgba(99,153,34,0.4)] hover:shadow-[0_0_50px_rgba(99,153,34,0.6)]">
               Explore RCA Software
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
             </a>

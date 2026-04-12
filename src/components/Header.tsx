@@ -57,7 +57,7 @@ const Header = () => {
                 <ChevronDown className="ml-1 h-4 w-4 transition-transform duration-200 group-hover:rotate-180" />
               </button>
               <div className="absolute left-0 mt-2 w-56 rounded-xl shadow-lg py-2 bg-white ring-1 ring-black ring-opacity-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform origin-top scale-95 group-hover:scale-100">
-                <Link to="/saas/rca/vsl" className="block px-4 py-3 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">
+                <Link to="/vsl/saas/rca" className="block px-4 py-3 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">
                   <div className="font-medium">Retail Control VSL</div>
                   <div className="text-xs text-gray-500 mt-0.5">SaaS Inventory Solution</div>
                 </Link>

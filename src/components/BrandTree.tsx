@@ -124,7 +124,7 @@ const BrandTree = () => {
             <div className="px-3 py-1 bg-blue-500 rounded-full text-[10px] font-bold uppercase tracking-widest">Live Case Study</div>
           </div>
           <h4 className="text-2xl font-bold mb-6">How we scaled Retail Control Architect to 50+ stores</h4>
-          <Link to="/saas/rca/vsl" className="relative group cursor-pointer block w-full">
+          <Link to="/vsl/saas/rca" className="relative group cursor-pointer block w-full">
             <div className="w-full aspect-video bg-slate-800 rounded-xl overflow-hidden flex items-center justify-center border border-slate-700 group-hover:border-blue-500 transition-colors">
               <Play className="h-12 w-12 text-blue-500 fill-blue-500 group-hover:scale-110 transition-transform" />
             </div>
@@ -147,7 +147,7 @@ const BrandTree = () => {
               </li>
             ))}
           </ul>
-          <Link to="/saas/rca/vsl" className="w-full py-5 bg-blue-600 text-white rounded-2xl font-bold text-lg hover:bg-blue-700 hover:shadow-xl hover:shadow-blue-200 transition-all flex items-center justify-center gap-2 group">
+          <Link to="/vsl/saas/rca" className="w-full py-5 bg-blue-600 text-white rounded-2xl font-bold text-lg hover:bg-blue-700 hover:shadow-xl hover:shadow-blue-200 transition-all flex items-center justify-center gap-2 group">
             View Complete VSL & Offer
             <ArrowRight className="h-5 w-5 transform group-hover:translate-x-1 transition-transform" />
           </Link>

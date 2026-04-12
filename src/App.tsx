@@ -9,7 +9,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<LandingPage />} />
-      <Route path="/saas/rca/vsl" element={<SaaSVslPage />} />
+      <Route path="/vsl/saas/rca" element={<SaaSVslPage />} />
       <Route path="/admin" element={<AdminDashboard />} />
     </Routes>
   );
