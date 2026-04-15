@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  
+  <!-- Homepage -->
+  <url>
+    <loc>https://nirvriksh.com/</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <!-- VSL/SaaS Page -->
+  <url>
+    <loc>https://nirvriksh.com/vsl</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <!-- RCA Game/Audit Page -->
+  <url>
+    <loc>https://nirvriksh.com/rca</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <!-- City Landing Pages - Vadodara -->
+  <url>
+    <loc>https://nirvriksh.com/garment-store-software-vadodara</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- City Landing Pages - Ahmedabad -->
+  <url>
+    <loc>https://nirvriksh.com/garment-store-software-ahmedabad</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- City Landing Pages - Surat -->
+  <url>
+    <loc>https://nirvriksh.com/garment-store-software-surat</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- City Landing Pages - Gandhinagar -->
+  <url>
+    <loc>https://nirvriksh.com/garment-store-software-gandhinagar</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- City Landing Pages - Bangalore -->
+  <url>
+    <loc>https://nirvriksh.com/garment-store-software-bangalore</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- City Landing Pages - Delhi -->
+  <url>
+    <loc>https://nirvriksh.com/garment-store-software-delhi</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- City Landing Pages - Mumbai -->
+  <url>
+    <loc>https://nirvriksh.com/garment-store-software-mumbai</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- City Landing Pages - Mysore -->
+  <url>
+    <loc>https://nirvriksh.com/garment-store-software-mysore</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+</urlset>

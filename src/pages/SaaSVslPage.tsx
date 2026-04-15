@@ -4,6 +4,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import BookingModal from '../components/BookingModal';
 import CaseStudySection from '../components/CaseStudySection';
+import SEOHead from '../components/SEOHead';
 
 
 /* --- Stock Audit Quiz Component --- */
@@ -184,6 +185,14 @@ const SaaSVslPage = () => {
 
   return (
     <div className="bg-white min-h-screen">
+      <SEOHead
+        title="Stock Certainty System for Garment Stores | 30-Day Stock Control Program India"
+        description="Stock Certainty System for clothing stores. Fix stock mismatch in 30 days. Same stock, complete control. Vadodara client: 17% to 2% mismatch, Rs 3.2 lakh recovered. Garment store management system India."
+        keywords="stock certainty system, 30 day stock control program for garment store, stock control software for clothing shop India, garment store management system India, inventory control for kapde ki dukaan, how to implement stock system in clothing store, variant level billing for garment shop, size colour wise inventory garment shop, GST billing with stock tracking garment store, stock control system India, clothing store inventory management, garment retail consulting India, done with you retail consulting India, retail control system for garment store India, stock mismatch garment store, how to fix stock loss in clothing store, garment store stock missing problem, how to reduce stock mismatch in retail store India, kapde ki dukaan ke liye system kaise banayein, stock control clothing store, garment software India, kapde ki dukaan software"
+        ogTitle="Stock Certainty System | 30-Day Stock Control for Garment Stores India"
+        ogDescription="Fix stock mismatch in 30 days. Same stock, complete control. Vadodara client recovered Rs 3.2 lakh. Stock control system for clothing stores India."
+        canonical="https://nirvriksh.com/vsl"
+      />
       <Header />
 
       <BookingModal
@@ -217,17 +226,17 @@ const SaaSVslPage = () => {
               >
                 Take Free Stock Audit
               </button>
-              <a 
-                href="https://www.producthunt.com/products/lalitha-garments?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-lalitha-garments" 
-                target="_blank" 
+              <a
+                href="https://www.producthunt.com/products/lalitha-garments?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-lalitha-garments"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="hover:opacity-80 transition-opacity"
               >
-                <img 
-                  alt="Lalitha Garments - Stock pe control, profit pe pakad. | Product Hunt" 
-                  width="250" 
-                  height="54" 
-                  src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1122063&theme=light&t=1776018852312" 
+                <img
+                  alt="Lalitha Garments - Stock pe control, profit pe pakad. | Product Hunt"
+                  width="250"
+                  height="54"
+                  src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1122063&theme=light&t=1776018852312"
                 />
               </a>
               <a
@@ -355,9 +364,9 @@ const SaaSVslPage = () => {
               boxShadow: 'rgba(0, 0, 0, 0.05) 0px 2px 8px'
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-                <img 
-                  alt="Lalitha Garments" 
-                  src="https://ph-files.imgix.net/fe14fabf-b25b-49ed-a8b8-a3e7f4ffa1f5.png?auto=format&fit=crop&w=80&h=80" 
+                <img
+                  alt="Lalitha Garments"
+                  src="https://ph-files.imgix.net/fe14fabf-b25b-49ed-a8b8-a3e7f4ffa1f5.png?auto=format&fit=crop&w=80&h=80"
                   style={{ width: '64px', height: '64px', borderRadius: '8px', objectFit: 'cover', flexShrink: 0 }}
                 />
                 <div style={{ flex: '1 1 0%', minWidth: '0px' }}>
@@ -369,10 +378,10 @@ const SaaSVslPage = () => {
                   </p>
                 </div>
               </div>
-              <a 
-                href="https://www.producthunt.com/products/lalitha-garments?embed=true&utm_source=embed&utm_medium=post_embed" 
-                target="_blank" 
-                rel="noopener" 
+              <a
+                href="https://www.producthunt.com/products/lalitha-garments?embed=true&utm_source=embed&utm_medium=post_embed"
+                target="_blank"
+                rel="noopener"
                 style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', marginTop: '12px', padding: '8px 16px', background: 'rgb(255, 97, 84)', color: 'rgb(255, 255, 255)', textDecoration: 'none', borderRadius: '8px', fontSize: '14px', fontWeight: 600 }}
               >
                 Check it out on Product Hunt →

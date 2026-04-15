@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, CheckCircle2, Store, DollarSign, PackageX, UserX } from 'lucide-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import SEOHead from '../components/SEOHead';
 
 const questions = [
   {
@@ -44,29 +45,63 @@ function RCAGamePage() {
     setLoading(true);
 
     try {
+      // Prepare data for Google Sheet via Sheety API
+      const timestamp = new Date().toLocaleString('en-IN', {
+        timeZone: 'Asia/Kolkata',
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      });
+
       const payload = {
-        mobile,
-        storeName,
-        stage: answers[0], // Store count
-        problems: [answers[1], answers[2]]
+        sheet1: {
+          storeName: storeName,
+          mobile: mobile,
+          storeCount: answers[0] || '', // How many stores
+          problem1: answers[1] || '', // Biggest daily headache
+          problem2: answers[2] || '', // Losing money to manual errors
+          stage: 'rca-audit-completed',
+          timestamp: timestamp,
+          source: 'RCA Audit Page'
+        }
       };
 
-      await fetch('http://localhost:3001/api/leads', {
+      // Send to Sheety API (Google Sheets)
+      const response = await fetch('https://api.sheety.co/05a0079d6a34e6b63fbef200c2db85c6/leadsSheet/sheet1', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify(payload)
       });
+
+      if (!response.ok) {
+        throw new Error('Failed to save data');
+      }
+
       setSubmitted(true);
-    } catch (e) {
-      console.error(e);
+    } catch (error) {
+      console.error('Error saving to Google Sheet:', error);
+      alert('Failed to save audit results. Please try again or contact us directly at +91 9353083597');
     }
     setLoading(false);
   };
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-white flex flex-col font-sans">
+      <SEOHead
+        title="Free Retail Store Audit | Garment Store Stock Control Assessment India"
+        description="Take free 60-second retail store audit. Identify stock mismatch, inventory gaps, and profit leakage in your garment store. Get instant report and expert consultation. Retail control system assessment India."
+        keywords="free retail store audit, garment store audit, stock control assessment, retail control gap audit, inventory audit garment shop, stock mismatch assessment, retail consulting for garment store, garment store consultant India, clothing store profitability consultant India, retail stock audit service India, control gap audit, stock loss clothing store, garment store stock missing problem, why my garment store is not profitable, garment shop mein paise kyun nahi bache rahe, kapda store mein cash flow problem, retail control system India, garment retail consulting India, stock control clothing store"
+        ogTitle="Free Retail Store Audit | Garment Store Stock Control Assessment"
+        ogDescription="Take free 60-second retail store audit. Identify stock mismatch and profit leakage. Get instant report and expert consultation."
+        canonical="https://nirvriksh.com/rca"
+      />
       <Header />
-      
+
       <main className="flex-1 flex flex-col items-center justify-center p-6 relative overflow-hidden pt-24">
         {/* Abstract Background */}
         <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-[#639922] opacity-10 rounded-full blur-[100px] pointer-events-none" />
@@ -74,23 +109,23 @@ function RCAGamePage() {
 
         <div className="max-w-2xl w-full z-10">
           <AnimatePresence mode="wait">
-            
+
             {step === 0 && (
-              <motion.div 
+              <motion.div
                 key="start"
                 initial="hidden"
                 animate="visible"
                 exit={{ opacity: 0, y: -30 }}
                 variants={{
                   hidden: { opacity: 0 },
-                  visible: { 
-                    opacity: 1, 
-                    transition: { staggerChildren: 0.2, delayChildren: 0.1 } 
+                  visible: {
+                    opacity: 1,
+                    transition: { staggerChildren: 0.2, delayChildren: 0.1 }
                   }
                 }}
                 className="text-center w-full max-w-4xl mx-auto flex flex-col items-center"
               >
-                <motion.div 
+                <motion.div
                   variants={{
                     hidden: { opacity: 0, scale: 0.8, y: 20 },
                     visible: { opacity: 1, scale: 1, y: 0, transition: { type: "spring", stiffness: 200, damping: 15 } }
@@ -99,8 +134,8 @@ function RCAGamePage() {
                 >
                   ⚠️ Warning for Indian Retail Format Store Owners
                 </motion.div>
-                
-                <motion.h1 
+
+                <motion.h1
                   variants={{
                     hidden: { opacity: 0 },
                     visible: { opacity: 1, transition: { staggerChildren: 0.08 } }
@@ -113,9 +148,9 @@ function RCAGamePage() {
                         key={`w1-${i}`}
                         variants={{
                           hidden: { opacity: 0, y: 50, rotateX: -60, filter: 'blur(8px)' },
-                          visible: { 
+                          visible: {
                             opacity: 1, y: 0, rotateX: 0, filter: 'blur(0px)',
-                            transition: { type: "spring", damping: 10, stiffness: 100 } 
+                            transition: { type: "spring", damping: 10, stiffness: 100 }
                           }
                         }}
                         className="mr-3 md:mr-4 inline-block text-[#FAFAFA]"
@@ -131,9 +166,9 @@ function RCAGamePage() {
                         key={`w2-${i}`}
                         variants={{
                           hidden: { opacity: 0, y: 50, rotateX: -60, filter: 'blur(8px)' },
-                          visible: { 
+                          visible: {
                             opacity: 1, y: 0, rotateX: 0, filter: 'blur(0px)',
-                            transition: { type: "spring", damping: 10, stiffness: 100 } 
+                            transition: { type: "spring", damping: 10, stiffness: 100 }
                           }
                         }}
                         className="mr-3 md:mr-4 inline-block text-neutral-500"
@@ -147,14 +182,14 @@ function RCAGamePage() {
                   </div>
                 </motion.h1>
 
-                <motion.div 
+                <motion.div
                   variants={{
                     hidden: { opacity: 0 },
                     visible: { opacity: 1, transition: { staggerChildren: 0.3 } }
                   }}
                   className="text-xl md:text-2xl mb-12 max-w-3xl mx-auto font-medium leading-relaxed space-y-6"
                 >
-                  <motion.p 
+                  <motion.p
                     variants={{
                       hidden: { opacity: 0, scale: 0.8, rotate: -2 },
                       visible: { opacity: 1, scale: 1, rotate: 0, transition: { type: "spring", stiffness: 150 } }
@@ -163,7 +198,7 @@ function RCAGamePage() {
                   >
                     Stock count kabhi match nahi hota? • Staff ki chori pakdi nahi ja rahi?
                   </motion.p>
-                  <motion.p 
+                  <motion.p
                     variants={{
                       hidden: { opacity: 0, y: 20 },
                       visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
@@ -174,14 +209,14 @@ function RCAGamePage() {
                   </motion.p>
                 </motion.div>
 
-                <motion.div 
+                <motion.div
                   variants={{
                     hidden: { opacity: 0, y: 30, scale: 0.9 },
                     visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.5, type: "spring", stiffness: 200 } }
                   }}
                   className="flex flex-col items-center"
                 >
-                  <button 
+                  <button
                     onClick={() => setStep(1)}
                     className="bg-gradient-to-r from-red-700 to-orange-600 hover:from-red-600 hover:to-orange-500 text-white px-12 py-5 rounded-2xl font-black text-xl transition-all shadow-[0_0_40px_rgba(239,68,68,0.4)] hover:shadow-[0_0_60px_rgba(239,68,68,0.6)] hover:-translate-y-1 flex items-center gap-4 group uppercase tracking-widest relative overflow-hidden"
                   >
@@ -205,20 +240,20 @@ function RCAGamePage() {
                 className="bg-[#111] border border-[#222] p-10 rounded-3xl shadow-2xl relative overflow-hidden"
               >
                 <div className="absolute top-0 left-0 w-full h-1 bg-[#222]">
-                  <motion.div 
+                  <motion.div
                     initial={{ width: `${((step - 1) / questions.length) * 100}%` }}
                     animate={{ width: `${(step / questions.length) * 100}%` }}
                     className="h-full bg-[#639922]"
                   />
                 </div>
-                
+
                 <div className="flex justify-center mb-6">
-                  {questions[step-1].icon}
+                  {questions[step - 1].icon}
                 </div>
-                <h2 className="text-3xl font-bold text-center mb-8">{questions[step-1].title}</h2>
+                <h2 className="text-3xl font-bold text-center mb-8">{questions[step - 1].title}</h2>
                 <div className="flex flex-col gap-4">
-                  {questions[step-1].options.map((opt, i) => (
-                    <button 
+                  {questions[step - 1].options.map((opt, i) => (
+                    <button
                       key={i}
                       onClick={() => handleNext(opt)}
                       className="text-left px-6 py-4 rounded-xl border border-[#333] hover:border-[#639922] hover:bg-[#639922]/10 transition-colors text-lg"
@@ -245,9 +280,9 @@ function RCAGamePage() {
                 <form onSubmit={handleSubmit} className="flex flex-col gap-5">
                   <div>
                     <label className="text-sm text-neutral-400 mb-2 block">Store Name / Brand</label>
-                    <input 
+                    <input
                       required
-                      type="text" 
+                      type="text"
                       placeholder="e.g. Trendy Wear"
                       className="w-full bg-[#1A1A1A] border border-[#333] rounded-lg p-4 text-white focus:outline-none focus:border-[#639922] text-lg"
                       value={storeName}
@@ -256,19 +291,19 @@ function RCAGamePage() {
                   </div>
                   <div>
                     <label className="text-sm text-neutral-400 mb-2 block">Mobile Number generated for SMS report</label>
-                    <input 
+                    <input
                       required
-                      type="tel" 
+                      type="tel"
                       placeholder="+91 99999 99999"
                       className="w-full bg-[#1A1A1A] border border-[#333] rounded-lg p-4 text-white focus:outline-none focus:border-[#639922] text-lg"
                       value={mobile}
                       onChange={e => setMobile(e.target.value)}
                     />
                   </div>
-                  
-                  <button 
+
+                  <button
                     disabled={loading}
-                    type="submit" 
+                    type="submit"
                     className="mt-4 bg-white text-black hover:bg-neutral-200 px-8 py-4 rounded-xl font-bold text-lg transition-colors flex items-center justify-center gap-3 disabled:opacity-50"
                   >
                     {loading ? 'Analyzing...' : 'Show Audit Results & Book Call'} <ArrowRight className="w-5 h-5" />
@@ -290,8 +325,8 @@ function RCAGamePage() {
                 <h2 className="text-3xl font-bold mb-4">Audit Saved to CRM.</h2>
                 <p className="text-lg text-neutral-400 mb-8">
                   Your dedicated Retail Control Architect expert will call you shortly to discuss your unique challenges:
-                  <br/><br/>
-                  <span className="text-[#DAA520] font-medium">Issue 1: {answers[1]}</span><br/>
+                  <br /><br />
+                  <span className="text-[#DAA520] font-medium">Issue 1: {answers[1]}</span><br />
                   <span className="text-[#DAA520] font-medium">Issue 2: {answers[2]}</span>
                 </p>
                 <div className="text-sm text-neutral-500">
@@ -299,7 +334,7 @@ function RCAGamePage() {
                 </div>
               </motion.div>
             )}
-            
+
           </AnimatePresence>
         </div>
       </main>
