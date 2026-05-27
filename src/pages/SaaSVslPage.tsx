@@ -227,13 +227,13 @@ const SaaSVslPage = () => {
                 Take Free Stock Audit
               </button>
               <a
-                href="https://www.producthunt.com/products/lalitha-garments?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-lalitha-garments"
+                href="https://rca.nirvriksh.com"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:opacity-80 transition-opacity"
               >
                 <img
-                  alt="Lalitha Garments - Stock pe control, profit pe pakad. | Product Hunt"
+                  alt="Lalitha Garments - Stock pe control, profit pe pakad."
                   width="250"
                   height="54"
                   src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1122063&theme=light&t=1776018852312"
@@ -379,7 +379,7 @@ const SaaSVslPage = () => {
                 </div>
               </div>
               <a
-                href="https://www.producthunt.com/products/lalitha-garments?embed=true&utm_source=embed&utm_medium=post_embed"
+                href="https://www.rca.nirvriksh.com"
                 target="_blank"
                 rel="noopener"
                 style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', marginTop: '12px', padding: '8px 16px', background: 'rgb(255, 97, 84)', color: 'rgb(255, 255, 255)', textDecoration: 'none', borderRadius: '8px', fontSize: '14px', fontWeight: 600 }}
