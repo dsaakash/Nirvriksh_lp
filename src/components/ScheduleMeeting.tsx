@@ -163,7 +163,7 @@ const ScheduleMeeting = () => {
                 
                 <div className="mt-12">
                   <a 
-                    href="https://calendly.com/nirvriksh/meet-up" 
+                    https://calendly.com/nirvriksh/retailos-demo" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="inline-flex items-center text-white bg-indigo-600 hover:bg-indigo-700 px-5 py-3 rounded-full transition-colors shadow-lg hover:shadow-xl transform hover:scale-105 duration-200"
